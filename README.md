@@ -82,6 +82,8 @@ TripAdvisor-Sentiment
 │   ├── src/                  # Source folder for HTML files
 │   ├── combined_restaurants.txt # Output from 1_get_restaurants.py
 │   └── selected_restaurants.txt  # Output from 2_restaurants_selection.py
+│   └── cleared_reviews.csv   # Output from 3_clear_reviews.py
+│   └── cleared_reviews_removed_line_breaks.csv  # Output from 3_clear_reviews.py with removed line breaks
 │
 ├── scripts/                  # Scripts for data processing
 │   ├── 1_get_restaurants.py  # Script to extract restaurant data
