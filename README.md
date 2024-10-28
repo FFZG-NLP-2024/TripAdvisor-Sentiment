@@ -16,6 +16,7 @@ Once the data is gathered, the second part involves working with the reviews, as
 - [Overview](#overview)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [System Information](#system-information)
   - [Cloning the Repository](#cloning-the-repository)
   - [Installation](#installation)
   - [Running the Scripts](#running-the-scripts)
@@ -34,6 +35,13 @@ Once the data is gathered, the second part involves working with the reviews, as
 This section will be continuously updated.
 
 You can install the required libraries using the `requirements.txt` file provided in the repository.
+
+### System Information
+- **Operating System:** Windows 11
+- **Version:** 10.0.22631.4317 (Windows 11)
+- **Windows Subsystem for Linux (WSL):** Enabled
+- **WSL Distribution:** Ubuntu
+- **WSL Version:** 2
 
 ### Cloning the Repository
 To clone this repository, run the following command:
