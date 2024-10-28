@@ -29,6 +29,7 @@ Once the data is gathered, the second part involves working with the reviews, as
 - **Python**: This project requires Python 3.7 or later.
 - **Libraries**: The following Python libraries are needed:
   - `beautifulsoup4`
+  - `pandas`
 
 This section will be continuously updated.
 
@@ -54,12 +55,14 @@ The project includes two main scripts for data acquisition:
 
     1_get_restaurants.py: This script extracts restaurant data from HTML files stored in the data/src/ directory and saves it to combined_restaurants.txt.
     2_restaurants_selection.py: This script selects a balanced random sample of 50 restaurants from the combined list and saves them to selected_restaurants.txt.
+    3_clear_reviews.py: This script cleans the review data by removing line breaks and consolidating review information from multiple CSV files into a single CSV file.
 
 To run the scripts, navigate to the project directory in your terminal and execute the following commands:
 
 ```bash
 scripts/1_get_restaurants.py
 scripts/2_restaurants_selection.py
+scripts/3_clear_reviews.py
 ```
 
 ## Repository Structure
@@ -75,7 +78,7 @@ TripAdvisor-Sentiment
 ├── scripts/                  # Scripts for data processing
 │   ├── 1_get_restaurants.py  # Script to extract restaurant data
 │   └── 2_restaurants_selection.py # Script for random selection
-│
+│   └── 3_clear_reviews.py     # Script to clean review data│
 ├── reports/                  # Reports and documentation
 │   └── midterm_report.md      # Midterm report detailing project progress
 │
