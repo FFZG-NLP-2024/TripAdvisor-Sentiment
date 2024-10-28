@@ -30,7 +30,7 @@ To clone this repository, run the following command:
 git clone https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment.git
 ```
 
-## Running the Scripts
+### Running the Scripts
 
 The project includes two main scripts for data acquisition:
 
