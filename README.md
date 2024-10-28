@@ -80,7 +80,7 @@ TripAdvisor-Sentiment
 │   └── 2_restaurants_selection.py # Script for random selection
 │   └── 3_clear_reviews.py     # Script to clean review data│
 ├── reports/                  # Reports and documentation
-│   └── midterm_report.md      # Midterm report detailing project progress
+│   └── 1_report.md           # First report detailing project progress
 │
 ├── requirements.txt          # Dependencies (if any)
 │
