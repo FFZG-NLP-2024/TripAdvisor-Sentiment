@@ -15,19 +15,37 @@ Once the data is gathered, the second part involves working with the reviews, as
 ## Table of Contents
 - [Overview](#overview)
 - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
   - [Cloning the Repository](#cloning-the-repository)
   - [Running the Scripts](#running-the-scripts)
+  - [Installation](#installation)
 - [Repository Structure](#repository-structure)
 - [License](#license)
 - [Credits](#credits)
 
 ## Getting Started
 
+### Prerequisites
+- **Python**: This project requires Python 3.7 or later.
+- **Libraries**: The following Python libraries are needed:
+  - `beautifulsoup4`
+
+This section will be continuously updated.
+
+You can install the required libraries using the `requirements.txt` file provided in the repository.
+
 ### Cloning the Repository
 To clone this repository, run the following command:
 
 ```bash
 git clone https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment.git
+```
+
+### Installation
+To install the required dependencies, navigate to the project directory and run:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ### Running the Scripts
