@@ -82,7 +82,7 @@ TripAdvisor-Sentiment
 ├── reports/                  # Reports and documentation
 │   └── 1_report.md           # First report detailing project progress
 │
-├── requirements.txt          # Dependencies (if any)
+├── requirements.txt          # Dependencies
 │
 ├── README.md                 # Project overview and setup instructions
 │
