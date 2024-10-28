@@ -1,4 +1,4 @@
-# Report 1: Sentiment Analysis of Michelin Restaurants
+# Report 1: Sentiment Analysis of Michelin Restaurants - Data Acquisition and Review Processing
 
 ## Background
 
