@@ -26,7 +26,7 @@ The first part of our project involves a structured approach to data acquisition
 
 ## Review Processing
 
-Following the data acquisition phase, the next significant part of our project involves working with the reviews gathered from TripAdvisor. This will include assigning sentiment to the reviews and developing annotation guidelines to standardize our analysis process.
+Following the data acquisition phase, the next significant part of our project involves working with the reviews gathered from TripAdvisor. This includes assigning sentiment to the reviews and developing annotation guidelines to standardize our analysis process. A new script, (`3_clear_reviews.py`), has been implemented to process reviews stored in the (`data/src/reviews`) folder, which contains initially scraped reviews using a Chromium extension. The filtered reviews are then combined into a single output file in the (`data`) folder.
 
 ## Conclusion
 
