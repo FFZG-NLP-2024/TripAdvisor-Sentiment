@@ -64,6 +64,7 @@ The project includes two main scripts for data acquisition:
     1_get_restaurants.py: This script extracts restaurant data from HTML files stored in the data/src/ directory and saves it to combined_restaurants.txt.
     2_restaurants_selection.py: This script selects a balanced random sample of 50 restaurants from the combined list and saves them to selected_restaurants.txt.
     3_clear_reviews.py: This script cleans the review data by removing line breaks and consolidating review information from multiple CSV files into a single CSV file.
+    4_assign_annotator.py : This script assigns an annotator person to each restaurant in the selected_restaurants.txt file.
 
 To run the scripts, navigate to the project directory in your terminal and execute the following commands:
 
