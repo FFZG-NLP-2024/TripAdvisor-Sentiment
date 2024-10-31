@@ -80,28 +80,28 @@ scripts/4_assign_annotator.py
 ```bash
 TripAdvisor-Sentiment
 │
-├── data/                     # Raw data files
-│   ├── src/                  # Source folder for HTML files
-│   ├── combined_restaurants.txt # Output from 1_get_restaurants.py
-│   └── selected_restaurants.txt  # Output from 2_restaurants_selection.py
-│   └── cleared_reviews.csv   # Output from 3_clear_reviews.py
-│   └── cleared_reviews_removed_line_breaks.csv  # Output from 3_clear_reviews.py with removed line breaks
-│   └── assigned_restaurants.txt # Output from 4_assign_annotator.py
+├── data/                                 # Data files
+│   ├── src/                              # Source folder for HTML files
+│   ├── combined_restaurants.txt          # Output from 1_get_restaurants.py
+│   ├── selected_restaurants.txt          # Output from 2_restaurants_selection.py
+│   ├── cleared_reviews.csv               # Output from 3_clear_reviews.py
+│   ├── cleared_reviews_removed_line_breaks.csv # Output from 3_clear_reviews.py with removed line breaks
+│   └── assigned_restaurants.txt          # Output from 4_assign_annotator.py
 │
-├── scripts/                  # Scripts for data processing
-│   ├── 1_get_restaurants.py  # Script to extract restaurant data
-│   └── 2_restaurants_selection.py # Script for random selection
-│   └── 3_clear_reviews.py    # Script to clean review data
-│   └── 4_assign_annotator.py # Script to assign an annotator person
+├── scripts/                              # Scripts for data processing
+│   ├── 1_get_restaurants.py              # Script to extract restaurant data
+│   ├── 2_restaurants_selection.py        # Script for random selection
+│   ├── 3_clear_reviews.py                # Script to clean review data
+│   └── 4_assign_annotator.py             # Script to assign an annotator person
 │
-├── reports/                  # Reports and documentation
-│   └── 1_report.md           # First report detailing project progress
+├── reports/                              # Reports and documentation
+│   └── 1_report.md                       # First report detailing project progress
 │
-├── requirements.txt          # Dependencies
+├── requirements.txt                      # Dependencies
 │
-├── README.md                 # Project overview and setup instructions
+├── README.md                             # Project overview and setup instructions
 │
-└── .gitignore                # Files/folders to ignore in version control
+└── .gitignore                            # Files/folders to ignore in version control
 ```
 
 ## License
