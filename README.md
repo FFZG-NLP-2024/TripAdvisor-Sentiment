@@ -84,11 +84,14 @@ TripAdvisor-Sentiment
 │   └── selected_restaurants.txt  # Output from 2_restaurants_selection.py
 │   └── cleared_reviews.csv   # Output from 3_clear_reviews.py
 │   └── cleared_reviews_removed_line_breaks.csv  # Output from 3_clear_reviews.py with removed line breaks
+│   └── assigned_restaurants.txt # Output from 4_assign_annotator.py
 │
 ├── scripts/                  # Scripts for data processing
 │   ├── 1_get_restaurants.py  # Script to extract restaurant data
 │   └── 2_restaurants_selection.py # Script for random selection
-│   └── 3_clear_reviews.py     # Script to clean review data│
+│   └── 3_clear_reviews.py    # Script to clean review data
+│   └── 4_assign_annotator.py # Script to assign an annotator person
+│
 ├── reports/                  # Reports and documentation
 │   └── 1_report.md           # First report detailing project progress
 │
