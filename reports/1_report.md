@@ -22,7 +22,12 @@ The first part of our project involves a structured approach to data acquisition
    - **Random Sampling**: A total of 50 restaurants are randomly selected, with the selection process accounting for the distribution of restaurants by country.
    - **Output**: The selected restaurants, along with their countries, are saved to a new text file (`selected_restaurants.txt`).
 
-4. **Getting Reviews**: After obtaining the selected restaurants, each of the five group members will manually verify the presence of these restaurants on TripAdvisor, with each member checking 10 restaurants. This verification is crucial for ensuring the reliability of our dataset before proceeding to the next phase.
+4. **Assigning Restaurants to Group Members**: To ensure an organized approach to data verification, each of the five group members is assigned a unique set of 10 restaurants from the `selected_restaurants.txt` file. A Python script (`3_assign_restaurants.py`) performs this assignment as follows:
+   - **Data Loading**: It reads the list of selected restaurants.
+   - **Random Assignment**: The script shuffles the list and assigns 10 unique restaurants to each group member.
+   - **Output**: The assignments for each group member are saved to a file (`assigned_restaurants.txt`), providing each person with their list of restaurants to verify.
+
+5. **Getting Reviews**: After the assignment, each group member will manually verify the presence of their assigned restaurants on TripAdvisor, ensuring the reliability of our dataset before proceeding to the next phase.
 
 ## Review Processing
 
