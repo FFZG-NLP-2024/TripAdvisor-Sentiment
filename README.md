@@ -82,6 +82,8 @@ TripAdvisor-Sentiment
 │
 ├── data/                                 # Data files
 │   ├── src/                              # Source folder for HTML files
+│   │   └── reviews/                      # Source folder for CSV files (per person)
+│   ├── cleared_reviews_per_person/       # Output from 3_clear_reviews.py (per person)
 │   ├── combined_restaurants.txt          # Output from 1_get_restaurants.py
 │   ├── selected_restaurants.txt          # Output from 2_restaurants_selection.py
 │   ├── cleared_reviews.csv               # Output from 3_clear_reviews.py
