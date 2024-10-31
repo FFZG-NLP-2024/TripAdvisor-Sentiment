@@ -106,9 +106,7 @@ TripAdvisor-Sentiment
 
 ## License
 
-This project is licensed under the Apache License 2.0. You may obtain a copy of the License at:
-
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+This project is licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 ### Key Terms:
 - **Permissions**: This license allows for the use, modification, and distribution of the code, provided that all copies or substantial portions of the code include the original license.
