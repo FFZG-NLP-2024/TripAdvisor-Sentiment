@@ -22,12 +22,15 @@ The first part of our project involves a structured approach to data acquisition
    - **Random Sampling**: A total of 50 restaurants are randomly selected, with the selection process accounting for the distribution of restaurants by country.
    - **Output**: The selected restaurants, along with their countries, are saved to a new text file (`selected_restaurants.txt`).
 
-4. **Assigning Restaurants to Group Members**: To ensure an organized approach to data verification, each of the five group members is assigned a unique set of 10 restaurants from the `selected_restaurants.txt` file. A Python script (`3_assign_restaurants.py`) performs this assignment as follows:
+4. **Assigning Restaurants to Group Members**: To ensure an organized approach to data verification, each of the five group members is assigned a unique set of 10 restaurants from the `selected_restaurants.txt` file. A Python script (`4_assign_annotator.py`) performs this assignment as follows:
    - **Data Loading**: It reads the list of selected restaurants.
-   - **Random Assignment**: The script shuffles the list and assigns 10 unique restaurants to each group member.
+   - **Random Assignment**: The script shuffles the list and assigns 10 unique restaurants to each placeholder (`Person_1` through `Person_5`).
+   - **Alphabetical Assignment of Members**: Finally, group members were assigned to each placeholder (`Person_1`, `Person_2`, etc.) according to the alphabetical order of their last names—the first surname alphabetically was assigned to `Person_1`, the second to `Person_2`, and so on.
    - **Output**: The assignments for each group member are saved to a file (`assigned_restaurants.txt`), providing each person with their list of restaurants to verify.
 
-5. **Getting Reviews**: After the assignment, each group member will manually verify the presence of their assigned restaurants on TripAdvisor, ensuring the reliability of our dataset before proceeding to the next phase.
+5. **Getting Reviews**: After assignment, each group member manually verifies the presence of their assigned restaurants on TripAdvisor to ensure our dataset's reliability. We anticipated most restaurants would be listed on TripAdvisor and have a sufficient number of English-language reviews, which was our criterium for review selection. However, during verification, we encountered some issues. Although most restaurants were present on TripAdvisor, some either had no reviews or fewer than 25 English-language reviews, which is the maximum allowed by the free version of our Chromium extension. Despite these limitations, we decided to keep these restaurants in our list and proceed with the available reviews. If the number of reviews proves insufficient in the next phase, we will either add reviews manually or consider alternative solutions.
+
+Since our group consists of five members, it was essential to distribute the review data among us. To facilitate this, we used the 5_assign_reviews.py script to allocate reviews to each member. This script organizes the reviews into person-specific files in the src/data/reviews folder, ensuring that each team member has a distinct subset of reviews to work with. Once this phase is complete, these individual review files will be merged into a single, comprehensive file in the main data folder, making it easier to proceed with annotation.
 
 ## Review Processing
 
