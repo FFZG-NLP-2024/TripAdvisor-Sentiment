@@ -72,6 +72,7 @@ To run the scripts, navigate to the project directory in your terminal and execu
 scripts/1_get_restaurants.py
 scripts/2_restaurants_selection.py
 scripts/3_clear_reviews.py
+scripts/4_assign_annotator.py
 ```
 
 ## Repository Structure
