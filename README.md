@@ -83,6 +83,8 @@ TripAdvisor-Sentiment
 ├── data/                                 # Data files
 │   ├── src/                              # Source folder for HTML files
 │   │   └── reviews/                      # Source folder for CSV files (per person)
+│   ├── sentiment/                        # Manually annotated data
+│   │   └── 1_sample/                     # Manually annotated data (first phase)
 │   ├── cleared_reviews_per_person/       # Output from 3_clear_reviews.py (per person)
 │   ├── combined_restaurants.txt          # Output from 1_get_restaurants.py
 │   ├── selected_restaurants.txt          # Output from 2_restaurants_selection.py
@@ -121,4 +123,24 @@ For more details, please refer to the full license text.
 
 ## Credits
 
-To be added.
+### Team Members
+- **[Nives Hüll](https://hulln.github.io/)** (nh23084@student.uni-lj.si, nhull@m.ffzg.hr): Role/Contribution (e.g., Project Coordinator, Data Acquisition)
+- **[Team Member 1]**: Role/Contribution (e.g., Data Analyst, Review Processing) *(Please add your name and role here)*
+- **[Team Member 2]**: Role/Contribution (e.g., Programmer, Script Development) *(Please add your name and role here)*
+- **[Team Member 3]**: Role/Contribution (e.g., Researcher, Documentation) *(Please add your name and role here)*
+- **[Team Member 4]**: Role/Contribution (e.g., Reviewer, Quality Assurance) *(Please add your name and role here)*
+
+### Acknowledgments
+- Special thanks to our professor [Gaurish Thakkar](https://github.com/thak123/) for guidance and support throughout the project.
+
+### Resources
+- **Libraries**: 
+  - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+  - [Pandas](https://pandas.pydata.org/)
+- **References**: (*Add any articles, papers, or online resources you referred to during the project*)
+
+### Tools
+- GitHub for version control and collaboration.
+- Python for data processing and analysis.
+- [TripAdvisor® Review Scraper](https://chromewebstore.google.com/detail/tripadvisor%C2%AE-review-scrap/pkbfojcocjkdhlcicpanllbeokhajlme) for review data extraction.
+- (*Add any additional tools*)
