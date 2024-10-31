@@ -101,6 +101,8 @@ TripAdvisor-Sentiment
 │
 ├── README.md                             # Project overview and setup instructions
 │
+├── LICENSE.txt                           # Apache License 2.0 for the project
+│
 └── .gitignore                            # Files/folders to ignore in version control
 ```
 
