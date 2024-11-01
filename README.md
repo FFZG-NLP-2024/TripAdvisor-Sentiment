@@ -127,7 +127,7 @@ For more details, please refer to the full license text.
 - **[Nives Hüll](https://hulln.github.io/)** (nh23084@student.uni-lj.si, nhull@m.ffzg.hr): Role/Contribution (e.g., Project Coordinator, Data Acquisition)
 - **[Team Member 1]**: Role/Contribution (e.g., Data Analyst, Review Processing) *(Please add your name and role here)*
 - **[Team Member 2]**: Role/Contribution (e.g., Programmer, Script Development) *(Please add your name and role here)*
-- **[Team Member 3]**: Role/Contribution (e.g., Researcher, Documentation) *(Please add your name and role here)*
+- **[Meta Kokalj](https://github.com/meta899)** (mk10260@student.uni-lj.si; m.marguerite.k@gmail.com): Role/Contribution (e.g., Researcher, Documentation)
 - **[Team Member 4]**: Role/Contribution (e.g., Reviewer, Quality Assurance) *(Please add your name and role here)*
 
 ### Acknowledgments
