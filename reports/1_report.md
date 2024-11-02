@@ -4,6 +4,12 @@
 
 In our project, we aim to analyze the sentiment of Michelin-starred restaurants that are marked as sustainable. This selection criterion was chosen because it provides a reliable dataset for our analysis. Initially, we considered focusing on restaurants across Europe and specific regions; however, the official Michelin website does not allow filtering by location—only by cuisine type. This limitation prompted us to adjust our approach and focus solely on extracting all relevant restaurants from the Michelin site.
 
+## Sentiment Analysis Objectives
+
+Our analysis will focus on several key questions regarding customer sentiment in Michelin-starred, sustainability-focused restaurants. We’ll look into whether sentiment varies across Michelin star levels, considering if higher-rated restaurants receive more positive reviews or if increased expectations result in more critical feedback. To explore this, we will group reviews by star level and analyze sentiment trends, helping us identify any consistent relationships between star ratings and customer satisfaction. Additionally, we’ll track how sentiment evolves over time for each restaurant, looking for shifts or trends in public perception that might indicate changes in customer experience.
+
+We also want to uncover the key themes that emerge in customer satisfaction. Specifically, we’ll examine which aspects of the dining experience—like service, food quality, or ambiance—are most frequently linked to positive, neutral, or negative reviews. By performing an aspect-based sentiment analysis, we can identify the elements that drive customer satisfaction or dissatisfaction. Lastly, we’ll analyze the sentiment distribution within each restaurant to see if there's a consistent pattern or if variability suggests inconsistencies in the dining experience. Together, these analyses will provide valuable insights into how customers perceive sustainable Michelin-starred restaurants and how closely public sentiment aligns with Michelin’s standards.
+
 ## Data Acquisition
 
 The first part of our project involves a structured approach to data acquisition, divided into four main steps:
