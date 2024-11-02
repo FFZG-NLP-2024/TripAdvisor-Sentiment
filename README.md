@@ -140,7 +140,8 @@ For more details, please refer to the full license text.
 - **References**: (*Add any articles, papers, or online resources you referred to during the project*)
 
 ### Tools
-- GitHub for version control and collaboration.
-- Python for data processing and analysis.
-- [TripAdvisor® Review Scraper](https://chromewebstore.google.com/detail/tripadvisor%C2%AE-review-scrap/pkbfojcocjkdhlcicpanllbeokhajlme) for review data extraction.
+- [**GitHub**](https://github.com/) for version control and collaboration.
+- [**Python**](https://www.python.org/) for data processing and analysis.
+- [**TripAdvisor® Review Scraper**](https://chromewebstore.google.com/detail/tripadvisor%C2%AE-review-scrap/pkbfojcocjkdhlcicpanllbeokhajlme) for review data extraction.
+- [**ChatGPT**](https://chat.openai.com/) for assistance with coding, debugging, and support with other project-related tasks.
 - (*Add any additional tools*)
