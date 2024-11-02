@@ -39,7 +39,7 @@ Person_4:
  - Taian Table - cn
  - Knystaforsen - se
  - Sojiki Nakahigashi - jp
- - Fiotto - kr
+ - Frederiksminde - dk
  - David Toutain - fr
  - Schloss Schauenstein - ch
  - Sincère - jp
