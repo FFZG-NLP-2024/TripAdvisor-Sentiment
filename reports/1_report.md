@@ -37,7 +37,7 @@ Once this phase is complete, these individual review files will be merged into a
 ## Review Processing
 
 Following the data acquisition phase, the next significant part of our project involves working with the reviews gathered from TripAdvisor. This includes assigning sentiment to the reviews and developing annotation guidelines to standardize our analysis process:
-   - **Assigning Sentiment**: The first step involves assigning a sentiment to a smaller subset of reviews. This is done manually by each group member. The results are stored into the `data/sentiment/1_sample` folder (Excel file `1_sentiment_assignment.csv` with different sheets for each person).
+   - **Assigning Sentiment**: The first step involves assigning a sentiment to a smaller subset of reviews. This is done manually by each group member. The results are stored into the `data/sentiment/1_sample_assignment` folder (different Excel files for each person (`person_1_removed_line_breaks.xslx` etc.)).
    - **Annotation Guidelines**: The second step involves creating an annotation guideline for each review.
 
 ## Conclusion
