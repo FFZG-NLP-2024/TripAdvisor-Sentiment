@@ -84,7 +84,7 @@ TripAdvisor-Sentiment
 │   ├── src/                              # Source folder for HTML files
 │   │   └── reviews/                      # Source folder for CSV files (per person)
 │   ├── sentiment/                        # Manually annotated data
-│   │   └── 1_sample/                     # Manually annotated data (first phase)
+│   │   └── 1_sample_assignment/          # Manually annotated data (first phase)
 │   ├── cleared_reviews_per_person/       # Output from 3_clear_reviews.py (per person)
 │   ├── combined_restaurants.txt          # Output from 1_get_restaurants.py
 │   ├── selected_restaurants.txt          # Output from 2_restaurants_selection.py
