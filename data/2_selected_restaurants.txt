@@ -1,0 +1,66 @@
+1 star Star Restaurants:
+Salt - hu - hu - 1 star
+La Paix - jp - jp - 1 star
+Seroja - sg - sg - 1 star
+Grič - si - si - 1 star
+Oba -  - es - Castille -  - 1 star
+mural - de - de - 1 star
+Stallen - no - no - 1 star
+Hiša Linhart - si - si - 1 star
+La Table d'Hôtes - La Rôtisserie du Chambertin - fr - Burgundy - Franche - La Rôtisserie du Chambertin - 1 star
+K2 - no - no - 1 star
+Korak - hr - hr - 1 star
+Casa Vigil - ar - ar - 1 star
+Oasis - Sapori Antichi - it - Sapori Antichi - 1 star
+Restaurant Pearl Morissette - ca - ca - 1 star
+VÅR - fi - fi - 1 star
+Patio - gr - gr - 1 star
+OD Urla - tr - tr - 1 star
+Le Prince Noir - Vivien Durand - fr - Vivien Durand - 1 star
+La Distillerie - lu - lu - 1 star
+Äponem - Auberge du Presbytère - fr - Auberge du Presbytère - 1 star
+
+2 star Star Restaurants:
+Il Gallo d'Oro - pt - pt - 2 star
+Château de Beaulieu - Christophe Dufossé - fr - Christophe Dufossé - 2 star
+L'air du temps - be - be - 2 star
+De Nieuwe Winkel - nl - nl - 2 star
+roots - ch - Basel - ch - 2 star
+Amber - hk - hk - 2 star
+Kontrast - no - no - 2 star
+La Côte Saint - Jacques - fr - Burgundy - Franche - Jacques - 2 star
+Terra The Magic Place - it - Trentino - it - 2 star
+Magdalena - ch - ch - 2 star
+Flore - nl - Noord - nl - 2 star
+Christophe Hay - Fleur de Loire - fr - Centre - Fleur de Loire - 2 star
+Essigbrätlein - de - de - 2 star
+etz - de - de - 2 star
+King's Joy - cn - cn - 2 star
+Kadeau Copenhagen - dk - dk - 2 star
+Delta - gr - gr - 2 star
+Tuju - br - br - 2 star
+Maison Aribert - fr - Auvergne - Rhône - fr - 2 star
+Miyamaso - jp - jp - 2 star
+
+3 star Star Restaurants:
+noma - dk - dk - 3 star
+Maaemo - no - no - 3 star
+Aponiente - es - es - 3 star
+Dal Pescatore - it - it - 3 star
+La Marine - fr - fr - 3 star
+Troisgros - Le Bois sans Feuilles - fr - Auvergne - Rhône - Le Bois sans Feuilles - 3 star
+L'Enclume - gb - gb - 3 star
+Rutz - de - de - 3 star
+The Inn at Little Washington - us - us - 3 star
+Cocina Hermanos Torres - es - es - 3 star
+Piazza Duomo - it - it - 3 star
+Restaurant Marcon - fr - Auvergne - Rhône - fr - 3 star
+Atelier Moessmer Norbert Niederkofler - it - Trentino - it - 3 star
+The French Laundry - us - us - 3 star
+El Celler de Can Roca - es - es - 3 star
+Hiša Franko - si - si - 3 star
+De Librije - nl - nl - 3 star
+Schloss Schauenstein - ch - ch - 3 star
+L'Effervescence - jp - jp - 3 star
+Sven Wassmer Memories - ch - ch - 3 star
+
