@@ -2,7 +2,7 @@ import os
 from bs4 import BeautifulSoup
 
 # Path to the directory containing HTML files
-directory_path = 'src/data'
+directory_path = 'data/src'
 
 # List to store all extracted restaurant data
 all_restaurants = []
@@ -19,19 +19,21 @@ for filename in os.listdir(directory_path):
         # Parse the file content with BeautifulSoup
         soup = BeautifulSoup(file_content, 'html.parser')
 
-        # Extract restaurant names and locations
-        for restaurant in soup.find_all(attrs={"data-restaurant-name": True, "data-restaurant-country": True}):
+        # Extract restaurant names, locations, stars, and regions
+        for restaurant in soup.find_all(attrs={"data-restaurant-name": True, "data-restaurant-country": True, "data-dtm-distinction": True, "data-dtm-region": True}):
             name = restaurant['data-restaurant-name']
-            location = restaurant['data-restaurant-country']
-            all_restaurants.append((name, location))
+            country = restaurant['data-restaurant-country']  # Renamed variable to country
+            stars = restaurant['data-dtm-distinction']
+            region = restaurant['data-dtm-region']  # Extracted region
+            all_restaurants.append((name, country, region, stars))  # Updated order of tuple
 
-# Remove duplicates for a unique list of restaurants and their locations
+# Remove duplicates for a unique list of restaurants and their details
 unique_restaurants = list(set(all_restaurants))
 
-# Save the unique list of restaurants and their locations to a single text file
-output_file_path = 'src/data/combined_restaurants.txt'
+# Save the unique list of restaurants and their details to a single text file
+output_file_path = 'data/1_restaurants_list.txt'
 with open(output_file_path, 'w', encoding='utf-8') as file:
-    for name, location in unique_restaurants:
-        file.write(f"{name} - {location}\n")
+    for name, country, region, stars in unique_restaurants:  # Adjusted unpacking to match new order
+        file.write(f"{name} - {country} - {region} - {stars}\n")  # Updated output format to reflect the order
 
 print(f"Extracted {len(unique_restaurants)} unique restaurants and saved to {output_file_path}.")

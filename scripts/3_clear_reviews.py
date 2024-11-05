@@ -2,10 +2,10 @@ import pandas as pd
 import os
 import glob
 
-# Define the input folder and output paths (modify the paths according to your assigned folders)
-input_folder = 'data/src/reviews/person_5/*.csv'
-output_path = "data/cleared_reviews/person_5/person_5_cleared_reviews.csv"
-output_path_cleaned = "data/cleared_reviews/person_5/person_5_removed_line_breaks.csv"
+# Define the input folder and output paths
+input_folder = 'data/src/reviews/*.csv'
+output_path = "data/3_reviews_cleared.csv"
+output_path_cleaned = "data/3_reviews_no_line_breaks.csv"
 
 # Create an empty list to store DataFrames
 all_reviews = []
