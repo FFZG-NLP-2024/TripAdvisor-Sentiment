@@ -4,7 +4,7 @@ from statsmodels.stats.inter_rater import fleiss_kappa
 from sklearn.metrics import cohen_kappa_score
 
 # Load your CSV file
-file_path = "data/test_25_sample_reviews.csv" 
+file_path = "data/25_sample_reviews.csv" 
 data = pd.read_csv(file_path)
 
 # Define mapping for sentiment labels to integer ratings
