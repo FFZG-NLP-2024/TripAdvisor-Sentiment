@@ -3,9 +3,9 @@ import os
 import glob
 
 # Define the input folder and output paths
-input_folder = 'data/src/reviews/*.csv'
-output_path = "data/3_reviews_cleared.csv"
-output_path_cleaned = "data/3_reviews_no_line_breaks.csv"
+input_folder = 'data/src/reviews/2_sample_150_reviews/*.csv'
+output_path = "data/2_sample/3_reviews_cleared.csv"
+output_path_cleaned = "data/2_sample/3_reviews_no_line_breaks.csv"
 
 # Create an empty list to store DataFrames
 all_reviews = []

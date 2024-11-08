@@ -31,7 +31,7 @@ for filename in os.listdir(directory_path):
 unique_restaurants = list(set(all_restaurants))
 
 # Save the unique list of restaurants and their details to a single text file
-output_file_path = 'data/1_restaurants_list.txt'
+output_file_path = 'data/2_sample/1_restaurants_list.txt'
 with open(output_file_path, 'w', encoding='utf-8') as file:
     for name, country, region, stars in unique_restaurants:  # Adjusted unpacking to match new order
         file.write(f"{name} - {country} - {region} - {stars}\n")  # Updated output format to reflect the order

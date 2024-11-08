@@ -3,7 +3,7 @@ import nltk
 from nltk.tokenize import sent_tokenize
 
 # Load the CSV file
-file_path = 'data/4_sampled_reviews_around_average.csv'
+file_path = 'data/2_sample/4_sampled_reviews_around_average.csv'
 data = pd.read_csv(file_path)
 
 # Download the punkt tokenizer if needed
@@ -41,7 +41,7 @@ for _, row in data.iterrows():
 sentence_df = pd.DataFrame(sentence_data)
 
 # Save the new DataFrame to a CSV file
-output_path = 'data/5_reviews_sentences.csv'
+output_path = 'data/2_sample/5_reviews_sentences.csv'
 sentence_df.to_csv(output_path, index=False)
 
 print("Sentences with full content have been saved to:", output_path)

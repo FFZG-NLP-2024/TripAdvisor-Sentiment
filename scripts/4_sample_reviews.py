@@ -8,7 +8,7 @@ nltk.download('punkt')
 nltk.download('punkt_tab')
 
 # Load your reviews data
-df = pd.read_csv('data/3_reviews_no_line_breaks.csv')
+df = pd.read_csv('data/2_sample/3_reviews_no_line_breaks.csv')
 
 # Function to count characters in reviews
 def count_characters(df):
@@ -57,20 +57,20 @@ average_length = char_count_df['char_count'].mean()
 print(f"Average Character Count: {average_length:.2f}")
 
 # Define a range around the average length (e.g., +/- 50 characters)
-lower_bound = max(0, average_length - 50)  # Ensure lower bound is not negative
-upper_bound = average_length + 50
+lower_bound = max(0, average_length - 100)  # Ensure lower bound is not negative
+upper_bound = average_length + 100
 
 # Filter the DataFrame for reviews within this range
 filtered_reviews = char_count_df[(char_count_df['char_count'] >= lower_bound) & (char_count_df['char_count'] <= upper_bound)]
 
-# Randomly sample 25 reviews from the filtered DataFrame
-sampled_reviews = filtered_reviews.sample(n=min(25, len(filtered_reviews)), random_state=1)
+# Randomly sample n reviews from the filtered DataFrame
+sampled_reviews = filtered_reviews.sample(n=min(125, len(filtered_reviews)), random_state=1)
 
 # Add a new index for the sampled reviews
 sampled_reviews.insert(0, 'sample_index', range(1, len(sampled_reviews) + 1))  # Start indexing from 1
 
 # Save the sampled reviews to a new CSV file
-sampled_reviews.to_csv('data/4_sampled_reviews_around_average.csv', index=False)
+sampled_reviews.to_csv('data/2_sample/4_sampled_reviews_around_average.csv', index=False)
 
 # Print the sampled reviews
 print("Sampled Reviews Around Average Character Count:")

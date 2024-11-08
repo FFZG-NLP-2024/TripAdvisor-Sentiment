@@ -2,8 +2,8 @@ import random
 from collections import defaultdict
 
 # Load data from the file
-input_file_name = 'data/1_restaurants_list.txt'
-output_file_name = 'data/2_selected_restaurants.txt'
+input_file_name = 'data/2_sample/1_restaurants_list.txt'
+output_file_name = 'data/2_sample/2_selected_restaurants.txt'
 
 # Step 1: Read the file and organize data by country code and star rating
 data = []
