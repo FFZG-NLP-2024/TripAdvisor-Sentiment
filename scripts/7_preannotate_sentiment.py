@@ -3,6 +3,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import torch
 import numpy as np
 from scipy.special import softmax
+from tqdm import tqdm 
 
 # Define the model names
 models = [
@@ -15,7 +16,7 @@ loaded_models = [AutoModelForSequenceClassification.from_pretrained(model) for m
 tokenizers = [AutoTokenizer.from_pretrained(model) for model in models]
 
 # Load your restaurant reviews CSV
-df = pd.read_csv('data/5_reviews_sentences.csv')
+df = pd.read_csv('data/2_sample/5_reviews_sentences.csv')
 
 # Initialize the labels list
 labels = ["Negative", "Positive"]
@@ -23,8 +24,8 @@ labels = ["Negative", "Positive"]
 # List to store the final predictions
 final_predictions = []
 
-# Loop over each sentence in your CSV
-for index, row in df.iterrows():
+# Loop over each sentence in your CSV with a progress bar
+for index, row in tqdm(df.iterrows(), total=len(df), desc="Processing reviews"):
     sentence = row['sentence']
     
     # Prepare to store scores for each model
@@ -55,7 +56,7 @@ for index, row in df.iterrows():
     # Store the prediction and confidence
     final_predictions.append(f"{max_label} ({confidence})")
     
-    # Print the results for debugging
+    # Print the results for each review
     print(f"Review: {sentence}")
     print(f"Combined Prediction: {max_label} with confidence {confidence}")
     print("\n" + "-"*50)  
@@ -64,6 +65,6 @@ for index, row in df.iterrows():
 df['Ensembled Sentiment'] = final_predictions
 
 # Save the updated DataFrame to a new CSV file
-df.to_csv('data/5_reviews_sentences_with_ensembled_sentiment.csv', index=False)
+df.to_csv('data/2_sample/7_reviews_sentences_with_ensembled_sentiment.csv', index=False)
 
-print("Sentiment predictions have been saved to 'data/5_reviews_sentences_with_ensembled_sentiment.csv'")
+print("Sentiment predictions have been saved to 'data/2_sample/7_reviews_sentences_with_ensembled_sentiment.csv'")
