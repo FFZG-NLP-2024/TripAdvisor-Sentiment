@@ -37,7 +37,7 @@ final_dataset = DatasetDict({
     'test': test_dataset
 })
 
-# Save the resulting dataset to disk (you can later upload it to HuggingFace)
-final_dataset.save_to_disk("scripts/dataset/split_tripadvisor_dataset")
+# Save the resulting dataset to disk (included in gitignore)
+final_dataset.save_to_disk("dataset/split_tripadvisor_dataset")
 
 print("Dataset split and saved successfully.")
