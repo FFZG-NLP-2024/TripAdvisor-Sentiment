@@ -1,6 +1,6 @@
 *.pt
 results
 scripts/modeli/sentiment_model
-dataset/split_tripadvisor_dataset
+dataset/
 scripts/3_train_models/logistic_regression/tfidf_vectorizer.pkl
 .gradio/
