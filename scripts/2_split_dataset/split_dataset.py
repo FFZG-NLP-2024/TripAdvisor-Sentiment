@@ -21,23 +21,15 @@ df = df[['review', 'overall']].rename(columns={'overall': 'label'})
 # Balance the dataset by limiting to 8,000 reviews per label
 balanced_df = df.groupby('label').apply(lambda x: x.sample(n=8000, random_state=42)).reset_index(drop=True)
 
-# Split into train (80%), validation (15%), test (5%)
-train, temp = train_test_split(balanced_df, test_size=0.2, random_state=42, stratify=balanced_df['label'])
-validation, test = train_test_split(temp, test_size=0.25, random_state=42, stratify=temp['label'])
+# Split into train+validation (80%) and test (20%)
+train_val, test = train_test_split(balanced_df, test_size=0.2, random_state=42, stratify=balanced_df['label'])
 
-# Convert pandas DataFrames to HuggingFace Dataset objects
-train_dataset = Dataset.from_pandas(train)
-validation_dataset = Dataset.from_pandas(validation)
-test_dataset = Dataset.from_pandas(test)
+# Split train+validation into train (75% of train+validation) and validation (25% of train+validation)
+train, validation = train_test_split(train_val, test_size=0.25, random_state=42, stratify=train_val['label'])
 
-# Combine the datasets into one dataset dict
-final_dataset = DatasetDict({
-    'train': train_dataset,
-    'validation': validation_dataset,
-    'test': test_dataset
-})
+# Save as Parquet files
+train.to_parquet('dataset/train.parquet', index=False)
+validation.to_parquet('dataset/validation.parquet', index=False)
+test.to_parquet('dataset/test.parquet', index=False)
 
-# Save the resulting dataset to disk (included in gitignore)
-final_dataset.save_to_disk("dataset/split_tripadvisor_dataset")
-
-print("Dataset split and saved successfully.")
+print("Dataset split and saved as Parquet files successfully.")
