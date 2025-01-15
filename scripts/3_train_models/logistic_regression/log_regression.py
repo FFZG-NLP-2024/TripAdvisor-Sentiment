@@ -1,88 +1,75 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
+from datasets import load_dataset
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
-from tqdm import tqdm
+from sklearn.metrics import classification_report, accuracy_score
+from collections import Counter
 
 # Load the dataset
-print("Loading dataset...")
-df = pd.read_parquet("hf://datasets/jniimi/tripadvisor-review-rating/data/train-00000-of-00001.parquet")
+dataset = load_dataset("nhull/tripadvisor-split-dataset")
 
-# Inspect the first few rows of the dataframe
-print("Inspecting the first few rows of the dataset:")
-print(df.head())
+# Extract data from the splits
+train_data = dataset['train']
+val_data = dataset['validation']
+test_data = dataset['test']
 
-# Check for missing values
-print("Checking for missing values in the dataset:")
-print(df.isnull().sum())
+# Count label occurrences for each split
+train_label_counts = Counter(train_data['label'])
+val_label_counts = Counter(val_data['label'])
+test_label_counts = Counter(test_data['label'])
 
-# Drop any rows with missing values in 'review' or 'overall'
-print("Dropping rows with missing values in 'review' or 'overall' columns...")
-df = df.dropna(subset=['review', 'overall'])
+# Print label distributions
+print("Label distribution in the training set:")
+for label, count in train_label_counts.items():
+    print(f"Label {label}: {count} samples")
 
-# Optional: Clean the text (remove non-alphanumeric characters, etc.)
-print("Cleaning the review text (removing non-alphanumeric characters and converting to lowercase)...")
-df['review'] = df['review'].str.replace(r'[^a-zA-Z\s]', '', regex=True).str.lower()
+print("\nLabel distribution in the validation set:")
+for label, count in val_label_counts.items():
+    print(f"Label {label}: {count} samples")
 
-# Inspect the cleaned data
-print("Inspecting the cleaned dataset:")
-print(df.head())
+print("\nLabel distribution in the test set:")
+for label, count in test_label_counts.items():
+    print(f"Label {label}: {count} samples")
 
-# Features: the 'review' column
-X = df['review']
+# Prepare data and labels
+X_train, y_train = train_data['review'], train_data['label']
+X_val, y_val = val_data['review'], val_data['label']
+X_test, y_test = test_data['review'], test_data['label']
 
-# Target: the 'overall' column (ratings)
-y = df['overall']
+# Vectorize the text using TF-IDF with additional preprocessing
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+import re
 
-# Check the shape of the features and labels
-print(f"Features shape: {X.shape}")
-print(f"Labels shape: {y.shape}")
+# Function to preprocess text
+def preprocess_text(text):
+    # Lowercase text
+    text = text.lower()
+    # Remove non-alphabetical characters (optional based on your dataset)
+    text = re.sub(r'[^a-z\s]', '', text)
+    return text
 
-# Split data into 80% training and 20% testing
-print("Splitting data into training and test sets (80% training, 20% test)...")
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Apply preprocessing to the reviews
+X_train = [preprocess_text(review) for review in X_train]
+X_val = [preprocess_text(review) for review in X_val]
+X_test = [preprocess_text(review) for review in X_test]
 
-# Check the shapes of the split data
-print(f"Training features shape: {X_train.shape}")
-print(f"Test features shape: {X_test.shape}")
+# Vectorize the text using TF-IDF
+vectorizer = TfidfVectorizer(max_features=10000, stop_words='english')  # Use built-in English stopwords
+X_train_vec = vectorizer.fit_transform(X_train)
+X_val_vec = vectorizer.transform(X_val)
+X_test_vec = vectorizer.transform(X_test)
 
-# Initialize the TfidfVectorizer
-print("Initializing the TF-IDF vectorizer...")
-vectorizer = TfidfVectorizer(max_features=5000)  # Use only the top 5000 words
+# Train a logistic regression model with class weights (to handle potential class imbalance)
+model = LogisticRegression(max_iter=1000, class_weight='balanced')  # Use balanced class weights
+model.fit(X_train_vec, y_train)
 
-# Use tqdm to show progress while fitting and transforming the training data
-print("Fitting the TF-IDF vectorizer to the training data...")
-X_train_tfidf = vectorizer.fit_transform(X_train)
-X_test_tfidf = vectorizer.transform(X_test)
+# Validate the model
+val_predictions = model.predict(X_val_vec)
+print("\nValidation Accuracy:", accuracy_score(y_val, val_predictions))
+print("Validation Classification Report:")
+print(classification_report(y_val, val_predictions))
 
-# Check the shape of the transformed data
-print(f"Training TF-IDF shape: {X_train_tfidf.shape}")
-print(f"Test TF-IDF shape: {X_test_tfidf.shape}")
-
-# Instantiate the Logistic Regression model
-print("Initializing the Logistic Regression model...")
-model = LogisticRegression(max_iter=1000, verbose=1)
-
-# Train the model on the training data
-# Manually adding a progress bar for training iterations
-print("Training the Logistic Regression model on the training data...")
-for i in tqdm(range(1), desc="Training Progress", ncols=100):  # Only 1 iteration for LogisticRegression
-    model.fit(X_train_tfidf, y_train)
-
-# Check the model’s coefficients (optional)
-print(f"Model coefficients: {model.coef_}")
-
-# Make predictions on the test set
-print("Making predictions on the test data...")
-y_pred = model.predict(X_test_tfidf)
-
-# Evaluate the model using a classification report
-print("Evaluating the model performance...")
-print(classification_report(y_test, y_pred))
-
-import joblib
-
-# Save the trained model and vectorizer
-joblib.dump(model, 'scripts/modeli/logistic_regression/logistic_regression_model.pkl')
-joblib.dump(vectorizer, 'scripts/modeli/logistic_regression/tfidf_vectorizer.pkl')
+# Test the model
+test_predictions = model.predict(X_test_vec)
+print("\nTest Accuracy:", accuracy_score(y_test, test_predictions))
+print("Test Classification Report:")
+print(classification_report(y_test, test_predictions))
