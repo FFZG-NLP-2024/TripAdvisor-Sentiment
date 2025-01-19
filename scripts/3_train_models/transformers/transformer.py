@@ -170,4 +170,3 @@ decoded_predictions = label_encoder.inverse_transform(predictions)
 print("\nPrediction results:")
 for text, pred in zip(random_texts, decoded_predictions):
     print(f"Review: {text}\nPredicted Rating: {pred}\n")
-

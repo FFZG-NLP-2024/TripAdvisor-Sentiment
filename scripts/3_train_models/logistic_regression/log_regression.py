@@ -17,7 +17,7 @@ train_label_counts = Counter(train_data['label'])
 val_label_counts = Counter(val_data['label'])
 test_label_counts = Counter(test_data['label'])
 
-# Print label distributions
+# Print label distributions 
 print("Label distribution in the training set:")
 for label, count in train_label_counts.items():
     print(f"Label {label}: {count} samples")
@@ -35,31 +35,14 @@ X_train, y_train = train_data['review'], train_data['label']
 X_val, y_val = val_data['review'], val_data['label']
 X_test, y_test = test_data['review'], test_data['label']
 
-# Vectorize the text using TF-IDF with additional preprocessing
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
-import re
-
-# Function to preprocess text
-def preprocess_text(text):
-    # Lowercase text
-    text = text.lower()
-    # Remove non-alphabetical characters (optional based on your dataset)
-    text = re.sub(r'[^a-z\s]', '', text)
-    return text
-
-# Apply preprocessing to the reviews
-X_train = [preprocess_text(review) for review in X_train]
-X_val = [preprocess_text(review) for review in X_val]
-X_test = [preprocess_text(review) for review in X_test]
-
 # Vectorize the text using TF-IDF
-vectorizer = TfidfVectorizer(max_features=10000, stop_words='english')  # Use built-in English stopwords
+vectorizer = TfidfVectorizer(max_features=10000)  # Adjust max_features as needed
 X_train_vec = vectorizer.fit_transform(X_train)
 X_val_vec = vectorizer.transform(X_val)
 X_test_vec = vectorizer.transform(X_test)
 
-# Train a logistic regression model with class weights (to handle potential class imbalance)
-model = LogisticRegression(max_iter=1000, class_weight='balanced')  # Use balanced class weights
+# Train a logistic regression model
+model = LogisticRegression(max_iter=1000)
 model.fit(X_train_vec, y_train)
 
 # Validate the model
