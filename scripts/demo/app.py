@@ -20,6 +20,10 @@ models = {
     "BERT Multilingual (NLP Town)": {
         "tokenizer": AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment"),
         "model": AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment"),
+    },
+    "TinyBERT": {
+        "tokenizer": AutoTokenizer.from_pretrained("elo4/TinyBERT-sentiment-model"),
+        "model": AutoModelForSequenceClassification.from_pretrained("elo4/TinyBERT-sentiment-model"),
     }
 }
 
@@ -68,32 +72,49 @@ def predict_with_bert_multilingual(text):
         predictions = logits.argmax(axis=-1).cpu().numpy()
     return int(predictions[0] + 1)
 
+def predict_with_tinybert(text):
+    tokenizer = models["TinyBERT"]["tokenizer"]
+    model = models["TinyBERT"]["model"]
+    encodings = tokenizer([text], padding=True, truncation=True, max_length=512, return_tensors="pt").to(device)
+    with torch.no_grad():
+        outputs = model(**encodings)
+        logits = outputs.logits
+        predictions = logits.argmax(axis=-1).cpu().numpy()
+    return int(predictions[0] + 1)
+
 # Unified function for sentiment analysis and statistics
 def analyze_sentiment_and_statistics(text):
     results = {
         "DistilBERT": predict_with_distilbert(text),
         "Logistic Regression": predict_with_logistic_regression(text),
         "BERT Multilingual (NLP Town)": predict_with_bert_multilingual(text),
+        "TinyBERT": predict_with_tinybert(text),
     }
     
     # Calculate statistics
     scores = list(results.values())
-    min_score_model = min(results, key=results.get)
-    max_score_model = max(results, key=results.get)
-    average_score = np.mean(scores)
-    
-    statistics = {
-        "Lowest Score": f"{results[min_score_model]} (Model: {min_score_model})",
-        "Highest Score": f"{results[max_score_model]} (Model: {max_score_model})",
-        "Average Score": f"{average_score:.2f}",
-    }
+    if all(score == scores[0] for score in scores):  # Check if all predictions are the same
+        statistics = {
+            "Message": "All models predict the same score.",
+            "Average Score": f"{scores[0]:.2f}",
+        }
+    else:
+        min_score_model = min(results, key=results.get)
+        max_score_model = max(results, key=results.get)
+        average_score = np.mean(scores)
+        
+        statistics = {
+            "Lowest Score": f"{results[min_score_model]} (Model: {min_score_model})",
+            "Highest Score": f"{results[max_score_model]} (Model: {max_score_model})",
+            "Average Score": f"{average_score:.2f}",
+        }
     return results, statistics
 
 # Gradio Interface
 with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding: 20px; }") as demo:
     gr.Markdown("# Sentiment Analysis App")
     gr.Markdown(
-        "This app predicts the sentiment of the input text on a scale from 1 to 5 using multiple models and provides detailed statistics."
+        "This app predicts the sentiment of the input text on a scale from 1 to 5 using multiple models and provides basic statistics."
     )
     
     with gr.Row():
@@ -134,6 +155,7 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
             distilbert_output = gr.Textbox(label="Predicted Sentiment (DistilBERT)", interactive=False)
             log_reg_output = gr.Textbox(label="Predicted Sentiment (Logistic Regression)", interactive=False)
             bert_output = gr.Textbox(label="Predicted Sentiment (BERT Multilingual)", interactive=False)
+            tinybert_output = gr.Textbox(label="Predicted Sentiment (TinyBERT)", interactive=False)
         
         with gr.Column():
             statistics_output = gr.Textbox(label="Statistics (Lowest, Highest, Average)", interactive=False)
@@ -141,17 +163,27 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
     # Button to analyze sentiment and show statistics
     def process_input_and_analyze(text_input):
         results, statistics = analyze_sentiment_and_statistics(text_input)
-        return (
-            f"{results['DistilBERT']}",
-            f"{results['Logistic Regression']}",
-            f"{results['BERT Multilingual (NLP Town)']}",
-            f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
-        )
+        if "Message" in statistics:  # All models predicted the same score
+            return (
+                f"{results['DistilBERT']}",
+                f"{results['Logistic Regression']}",
+                f"{results['BERT Multilingual (NLP Town)']}",
+                f"{results['TinyBERT']}",
+                f"Statistics:\n{statistics['Message']}\nAverage Score: {statistics['Average Score']}"
+            )
+        else:  # Min and Max scores are present
+            return (
+                f"{results['DistilBERT']}",
+                f"{results['Logistic Regression']}",
+                f"{results['BERT Multilingual (NLP Town)']}",
+                f"{results['TinyBERT']}",
+                f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
+            )
     
     analyze_button.click(
         process_input_and_analyze,
         inputs=[text_input],
-        outputs=[distilbert_output, log_reg_output, bert_output, statistics_output]
+        outputs=[distilbert_output, log_reg_output, bert_output, tinybert_output, statistics_output]
     )
 
 # Launch the app
