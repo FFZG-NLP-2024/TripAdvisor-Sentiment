@@ -6,3 +6,6 @@ scripts/3_train_models/logistic_regression/tfidf_vectorizer.pkl
 .gradio/
 best_model/
 trained_model/
+models/
+logs/
+tmp_trainer/

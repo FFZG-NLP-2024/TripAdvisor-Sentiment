@@ -2,8 +2,8 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import torch
 
 # Load the trained model and tokenizer
-model = AutoModelForSequenceClassification.from_pretrained("trained_model")
-tokenizer = AutoTokenizer.from_pretrained("trained_model")
+model = AutoModelForSequenceClassification.from_pretrained("models/distilbert/best_trained_model")
+tokenizer = AutoTokenizer.from_pretrained("models/distilbert/best_trained_model")
 
 # Move model to the correct device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -41,7 +41,6 @@ validation_dataloader = DataLoader(
 )
 
 print("Validation dataset preprocessed and DataLoader created!")
-
 
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from torch.nn.functional import softmax
