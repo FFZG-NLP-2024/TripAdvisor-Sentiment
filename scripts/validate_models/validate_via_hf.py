@@ -36,7 +36,7 @@ def custom_collate_fn(features):
 
 # Create the validation DataLoader
 validation_dataloader = DataLoader(
-    tokenized_dataset["validation"], 
+    tokenized_dataset["test"], 
     batch_size=64,  # You can adjust the batch size if needed
     shuffle=False, 
     collate_fn=custom_collate_fn

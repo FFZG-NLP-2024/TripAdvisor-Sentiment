@@ -110,7 +110,6 @@ class DistilBertClassifier(BaseEstimator, ClassifierMixin):
             setattr(self, param, value)
         return self
 
-
 # Load the dataset
 dataset = load_dataset("nhull/tripadvisor-split-dataset-v2")
 
@@ -120,42 +119,36 @@ def preprocess_function(examples):
 
 tokenized_dataset = dataset.map(preprocess_function, batched=True)
 
-# Use the whole dataset for training and validation
-X_train = tokenized_dataset["train"]["review"]
-y_train = tokenized_dataset["train"]["label"]
-X_val = tokenized_dataset["validation"]["review"]
-y_val = tokenized_dataset["validation"]["label"]
+# Test the model on the test set and save results
+X_test = tokenized_dataset["test"]["review"]
+y_test = tokenized_dataset["test"]["label"]
 
-# Train the model with specific hyperparameters
+# Initialize the model with specific hyperparameters
 model = DistilBertClassifier(learning_rate=3e-05, batch_size=64, epochs=10)
-model.fit(X_train, y_train)
 
-# Save the trained model
-model.model.save_pretrained("models/distilbert/best_trained_model")
-model.tokenizer.save_pretrained("models/distilbert/best_trained_model")
-print("Model and tokenizer saved!")
+# Make predictions on the test set
+y_pred, correct_predictions, misclassified_predictions = model.predict(X_test, y_test)
 
-# Make predictions on the validation set and track correct and misclassified predictions
-y_pred, correct_predictions, misclassified_predictions = model.predict(X_val, y_val)
+# Combine correct and misclassified predictions into a single dataset with a "Correct" column
+test_results = []
+for sentence, true_label, pred_label in correct_predictions:
+    test_results.append([sentence, true_label, pred_label, 1])  # 1 indicates correct
 
-# Save the correct predictions to a CSV file
-with open("correct_predictions.csv", mode="w", newline="") as file:
+for sentence, true_label, pred_label, difference in misclassified_predictions:
+    test_results.append([sentence, true_label, pred_label, 0])  # 0 indicates incorrect
+
+# Save the results to a single CSV file
+with open("test_predictions.csv", mode="w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Sentence", "Real Label", "Predicted Label"])
-    writer.writerows(correct_predictions)
+    writer.writerow(["Sentence", "Real Label", "Predicted Label", "Correct"])
+    writer.writerows(test_results)
 
-# Save the misclassified predictions to a CSV file
-with open("misclassified_predictions.csv", mode="w", newline="") as file:
-    writer = csv.writer(file)
-    writer.writerow(["Sentence", "Real Label", "Predicted Label", "Difference"])
-    writer.writerows(misclassified_predictions)
-
-# Evaluate the model metrics
-accuracy = accuracy_score(y_val, y_pred)
-precision = precision_score(y_val, y_pred, average='weighted')
-recall = recall_score(y_val, y_pred, average='weighted')
-f1 = f1_score(y_val, y_pred, average='weighted')
-conf_matrix = confusion_matrix(y_val, y_pred)
+# Evaluate the model metrics on the test set
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='weighted')
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # Print evaluation metrics
 print(f"Accuracy: {accuracy:.4f}")
