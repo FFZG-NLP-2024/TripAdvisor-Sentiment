@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU and enforce CPU execution
+
 import gradio as gr
 from transformers import (
     DistilBertTokenizerFast,
@@ -9,8 +12,11 @@ from huggingface_hub import hf_hub_download
 import torch
 import pickle
 import numpy as np
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import re
 
-# Load models and tokenizers
+# Load pre-trained models and tokenizers
 models = {
     "DistilBERT": {
         "tokenizer": DistilBertTokenizerFast.from_pretrained("nhull/distilbert-sentiment-model"),
@@ -24,6 +30,10 @@ models = {
     "TinyBERT": {
         "tokenizer": AutoTokenizer.from_pretrained("elo4/TinyBERT-sentiment-model"),
         "model": AutoModelForSequenceClassification.from_pretrained("elo4/TinyBERT-sentiment-model"),
+    },
+    "RoBERTa": {
+        "tokenizer": AutoTokenizer.from_pretrained("ordek899/roberta_1to5rating_pred_for_restaur_trained_on_hotels"),
+        "model": AutoModelForSequenceClassification.from_pretrained("ordek899/roberta_1to5rating_pred_for_restaur_trained_on_hotels"),
     }
 }
 
@@ -46,7 +56,30 @@ for model_data in models.values():
     if "model" in model_data:
         model_data["model"].to(device)
 
-# Functions for prediction
+# Load GRU model and tokenizer
+gru_repo_id = "arjahojnik/GRU-sentiment-model"
+gru_model_path = hf_hub_download(repo_id=gru_repo_id, filename="best_GRU_tuning_model.h5")
+gru_model = load_model(gru_model_path)
+gru_tokenizer_path = hf_hub_download(repo_id=gru_repo_id, filename="my_tokenizer.pkl")
+with open(gru_tokenizer_path, "rb") as f:
+    gru_tokenizer = pickle.load(f)
+
+# Preprocessing function for GRU
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r"[^a-zA-Z\s]", "", text).strip()
+    return text
+
+# GRU prediction function
+def predict_with_gru(text):
+    cleaned = preprocess_text(text)
+    seq = gru_tokenizer.texts_to_sequences([cleaned])
+    padded_seq = pad_sequences(seq, maxlen=200)  # Ensure maxlen matches the GRU training
+    probs = gru_model.predict(padded_seq)
+    predicted_class = np.argmax(probs, axis=1)[0]
+    return int(predicted_class + 1)
+
+# Functions for other model predictions
 def predict_with_distilbert(text):
     tokenizer = models["DistilBERT"]["tokenizer"]
     model = models["DistilBERT"]["model"]
@@ -82,30 +115,44 @@ def predict_with_tinybert(text):
         predictions = logits.argmax(axis=-1).cpu().numpy()
     return int(predictions[0] + 1)
 
+def predict_with_roberta_ordek899(text):
+    tokenizer = models["RoBERTa"]["tokenizer"]
+    model = models["RoBERTa"]["model"]
+    encodings = tokenizer([text], padding=True, truncation=True, max_length=512, return_tensors="pt").to(device)
+    with torch.no_grad():
+        outputs = model(**encodings)
+        logits = outputs.logits
+        predictions = logits.argmax(axis=-1).cpu().numpy()
+    return int(predictions[0] + 1)
+
 # Unified function for sentiment analysis and statistics
 def analyze_sentiment_and_statistics(text):
     results = {
+        "GRU Model": predict_with_gru(text),
         "DistilBERT": predict_with_distilbert(text),
         "Logistic Regression": predict_with_logistic_regression(text),
         "BERT Multilingual (NLP Town)": predict_with_bert_multilingual(text),
         "TinyBERT": predict_with_tinybert(text),
+        "RoBERTa": predict_with_roberta_ordek899(text),
     }
     
     # Calculate statistics
     scores = list(results.values())
-    if all(score == scores[0] for score in scores):  # Check if all predictions are the same
+    min_score = min(scores)
+    max_score = max(scores)
+    min_score_models = [model for model, score in results.items() if score == min_score]
+    max_score_models = [model for model, score in results.items() if score == max_score]
+    average_score = np.mean(scores)
+
+    if all(score == scores[0] for score in scores):
         statistics = {
             "Message": "All models predict the same score.",
-            "Average Score": f"{scores[0]:.2f}",
+            "Average Score": f"{average_score:.2f}",
         }
     else:
-        min_score_model = min(results, key=results.get)
-        max_score_model = max(results, key=results.get)
-        average_score = np.mean(scores)
-        
         statistics = {
-            "Lowest Score": f"{results[min_score_model]} (Model: {min_score_model})",
-            "Highest Score": f"{results[max_score_model]} (Model: {max_score_model})",
+            "Lowest Score": f"{min_score} (Models: {', '.join(min_score_models)})",
+            "Highest Score": f"{max_score} (Models: {', '.join(max_score_models)})",
             "Average Score": f"{average_score:.2f}",
         }
     return results, statistics
@@ -152,10 +199,12 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
 
     with gr.Row():
         with gr.Column():
+            gru_output = gr.Textbox(label="Predicted Sentiment (GRU Model)", interactive=False)
             distilbert_output = gr.Textbox(label="Predicted Sentiment (DistilBERT)", interactive=False)
             log_reg_output = gr.Textbox(label="Predicted Sentiment (Logistic Regression)", interactive=False)
             bert_output = gr.Textbox(label="Predicted Sentiment (BERT Multilingual)", interactive=False)
             tinybert_output = gr.Textbox(label="Predicted Sentiment (TinyBERT)", interactive=False)
+            roberta_ordek_output = gr.Textbox(label="Predicted Sentiment (RoBERTa)", interactive=False)
         
         with gr.Column():
             statistics_output = gr.Textbox(label="Statistics (Lowest, Highest, Average)", interactive=False)
@@ -163,27 +212,39 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
     # Button to analyze sentiment and show statistics
     def process_input_and_analyze(text_input):
         results, statistics = analyze_sentiment_and_statistics(text_input)
-        if "Message" in statistics:  # All models predicted the same score
+        if "Message" in statistics:
             return (
+                f"{results['GRU Model']}",
                 f"{results['DistilBERT']}",
                 f"{results['Logistic Regression']}",
                 f"{results['BERT Multilingual (NLP Town)']}",
                 f"{results['TinyBERT']}",
+                f"{results['RoBERTa']}",
                 f"Statistics:\n{statistics['Message']}\nAverage Score: {statistics['Average Score']}"
             )
-        else:  # Min and Max scores are present
+        else:
             return (
+                f"{results['GRU Model']}",
                 f"{results['DistilBERT']}",
                 f"{results['Logistic Regression']}",
                 f"{results['BERT Multilingual (NLP Town)']}",
                 f"{results['TinyBERT']}",
+                f"{results['RoBERTa']}",
                 f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
             )
     
     analyze_button.click(
         process_input_and_analyze,
         inputs=[text_input],
-        outputs=[distilbert_output, log_reg_output, bert_output, tinybert_output, statistics_output]
+        outputs=[
+            gru_output,
+            distilbert_output, 
+            log_reg_output, 
+            bert_output, 
+            tinybert_output, 
+            roberta_ordek_output, 
+            statistics_output
+        ]
     )
 
 # Launch the app
