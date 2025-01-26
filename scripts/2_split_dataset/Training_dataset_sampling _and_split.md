@@ -6,8 +6,10 @@ The "TripAdvisor Review Rating" dataset (jniimi/tripadvisor-review-rating) consi
 
 The statistical distribution of the 'overall' ratings showed an imbalance, with:
 - 42.98% of reviews labeled with a rating of 5,
-- 33.65% with a rating of 4, and
-- smaller percentages for ratings 1, 2, and 3.
+- 33.65% with a rating of 4,
+- 14.02% with a rating of 3,
+- 5.36% with a rating of 2, and
+- 4.00% with a rating of 1.
 
 ## Balancing the Dataset
 
