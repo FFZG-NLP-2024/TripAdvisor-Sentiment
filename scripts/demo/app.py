@@ -191,36 +191,16 @@ with gr.Blocks(
         max-width: 900px;
         margin: auto;
         padding: 20px;
-        background-color: #1e1e1e; /* Dark background for contrast */
-        color: white; /* White text throughout */
     }
     h1 {
         text-align: center;
         font-size: 2.5rem;
-        color: white; /* White text for title */
     }
     footer {
         text-align: center;
         margin-top: 20px;
         font-size: 14px;
-        color: white; /* White text for footer */
-    }
-    .gr-button {
-        background-color: #4a4a4a; /* Dark gray button background */
-        color: white; /* White button text */
-        border-radius: 8px; /* Rounded buttons */
-        padding: 10px 20px;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
-    .gr-button:hover {
-        background-color: #6a6a6a; /* Slightly lighter gray on hover */
-    }
-    .gr-textbox, .gr-dropdown, .gr-output {
-        border: 1px solid #4a4a4a; /* Subtle gray border */
-        border-radius: 8px; /* Rounded edges */
-        background-color: #2e2e2e; /* Darker gray input background */
-        color: white; /* White text for inputs/outputs */
+        color: gray;
     }
     """
 ) as demo:
@@ -302,9 +282,9 @@ with gr.Blocks(
         <footer>
             This demo was built as a part of the NLP course at the University of Zagreb.  
             Check out our GitHub repository:  
-            <a href="https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment/" target="_blank" style="color: white; text-decoration: underline;">TripAdvisor Sentiment Analysis</a>  
+            <a href="https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment/" target="_blank">TripAdvisor Sentiment Analysis</a>  
             Explore our HuggingFace collection:  
-            <a href="https://huggingface.co/collections/nhull/nlp-zg-6794604b85fd4216e6470d38" target="_blank" style="color: white; text-decoration: underline;">NLP Zagreb HuggingFace Collection</a>
+            <a href="https://huggingface.co/collections/nhull/nlp-zg-6794604b85fd4216e6470d38" target="_blank">NLP Zagreb HuggingFace Collection</a>
         </footer>
         """
     )
