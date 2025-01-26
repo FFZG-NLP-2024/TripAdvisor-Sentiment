@@ -1,6 +1,12 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU and enforce CPU execution
 
+from PIL import Image
+from huggingface_hub import hf_hub_download
+
+# Load a fun unicorn image
+unicorn_image_path = "scripts/demo/unicorn.png"
+
 import gradio as gr
 from transformers import (
     DistilBertTokenizerFast,
@@ -196,32 +202,73 @@ with gr.Blocks(
         text-align: center;
         font-size: 2.5rem;
     }
+    .unicorn-image {
+        display: block;
+        margin: auto;
+        width: 300px;  /* Larger size */
+        height: auto;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        animation: magical-float 5s ease-in-out infinite;  /* Gentle floating animation */
+    }
+
+    @keyframes magical-float {
+        0% {
+            transform: translate(0, 0) rotate(0deg);  /* Start position */
+        }
+        25% {
+            transform: translate(10px, -10px) rotate(3deg);  /* Slightly up and right, tilted */
+        }
+        50% {
+            transform: translate(0, -20px) rotate(0deg);  /* Higher point, back to straight */
+        }
+        75% {
+            transform: translate(-10px, -10px) rotate(-3deg);  /* Slightly up and left, tilted */
+        }
+        100% {
+            transform: translate(0, 0) rotate(0deg);  /* Return to start position */
+        }
+    }
+
     footer {
         text-align: center;
         margin-top: 20px;
         font-size: 14px;
         color: gray;
     }
+    .custom-analyze-button {
+    background-color: #e8a4c9;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, background-color 0.2s;
+}
+.custom-analyze-button:hover {
+    background-color: #d693b8;
+    transform: scale(1.05);
+}
     """
 ) as demo:
+    # Add the unicorn image at the start
+    gr.Image(
+        value=unicorn_image_path,  # File path or URL
+        type="filepath",  # Correct type for file paths
+        elem_classes=["unicorn-image"]
+    )
+
+
     gr.Markdown("# Sentiment Analysis Demo")
     gr.Markdown(
         """
-        This demo analyzes the sentiment of text inputs (e.g., hotel or restaurant reviews) on a scale from 1 to 5 using various machine learning, deep learning, and transformer-based models. 
-
-        - **Machine Learning**: Logistic Regression with TF-IDF.
-        - **Deep Learning**: GRU, LSTM, and BiLSTM models.
-        - **Transformers**: DistilBERT, TinyBERT, BERT Multilingual, and RoBERTa.
-
-        ### Features:
-        - Compare predictions across different models.
-        - See which model predicts the highest and lowest scores.
-        - Get the average sentiment score across all models.
-        - Easily test with your own input or select from suggested reviews.
-
-        Use this app to explore how different models interpret sentiment and compare their outputs!
+        Welcome! A magical unicorn 🦄 will guide you through this sentiment analysis journey! 🎉  
+        This app lets you explore how different models interpret sentiment and compare their predictions.  
+        **Enjoy the magic!**
         """
     )
+
 
     with gr.Row():
         with gr.Column():
@@ -251,7 +298,7 @@ with gr.Blocks(
                 inputs=[sample_dropdown],
                 outputs=[text_input]
             )
-            analyze_button = gr.Button("Analyze Sentiment")
+            analyze_button = gr.Button("Analyze Sentiment", elem_classes=["custom-analyze-button"])
         
     with gr.Row():
         with gr.Column():
@@ -283,13 +330,59 @@ with gr.Blocks(
             This demo was built as a part of the NLP course at the University of Zagreb.  
             Check out our GitHub repository:  
             <a href="https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment/" target="_blank">TripAdvisor Sentiment Analysis</a>  
-            Explore our HuggingFace collection:  
-            <a href="https://huggingface.co/collections/nhull/nlp-zg-6794604b85fd4216e6470d38" target="_blank">NLP Zagreb HuggingFace Collection</a>
+            or explore our HuggingFace collection:  
+            <a href="https://huggingface.co/collections/nhull/nlp-zg-6794604b85fd4216e6470d38" target="_blank">NLP Zagreb HuggingFace Collection</a>.
         </footer>
         """
     )
-
     def process_input_and_analyze(text_input):
+    # Check for empty input
+        if not text_input.strip():
+            funny_message = "Are you sure you wrote something? Try again! 🧐"
+            return (
+                funny_message,  # Logistic Regression
+                funny_message,  # GRU
+                funny_message,  # LSTM
+                funny_message,  # BiLSTM
+                funny_message,  # DistilBERT
+                funny_message,  # BERT Multilingual
+                funny_message,  # TinyBERT
+                funny_message,  # RoBERTa
+                "No statistics to display, as nothing was input. 🤷‍♀️"
+            )
+        
+        # Check for one letter/number input
+        if len(text_input.strip()) == 1 or text_input.strip().isdigit():
+            funny_message = "Why not write something that makes sense? 🤔"
+            return (
+                funny_message,  # Logistic Regression
+                funny_message,  # GRU
+                funny_message,  # LSTM
+                funny_message,  # BiLSTM
+                funny_message,  # DistilBERT
+                funny_message,  # BERT Multilingual
+                funny_message,  # TinyBERT
+                funny_message,  # RoBERTa
+                "No statistics to display for one letter or number. 😅"
+            )
+        
+        # Check if the review is shorter than 5 words
+        if len(text_input.split()) < 5:
+            results, statistics = analyze_sentiment_and_statistics(text_input)
+            short_message = "Maybe try with some longer text next time. 😉"
+            return (
+                f"{results['Logistic Regression']} - {short_message}",
+                f"{results['GRU Model']} - {short_message}",
+                f"{results['LSTM Model']} - {short_message}",
+                f"{results['BiLSTM Model']} - {short_message}",
+                f"{results['DistilBERT']} - {short_message}",
+                f"{results['BERT Multilingual (NLP Town)']} - {short_message}",
+                f"{results['TinyBERT']} - {short_message}",
+                f"{results['RoBERTa']} - {short_message}",
+                f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}\n{short_message}"
+            )
+
+        # Proceed with normal sentiment analysis if none of the above conditions apply
         results, statistics = analyze_sentiment_and_statistics(text_input)
         if "Message" in statistics:
             return (
