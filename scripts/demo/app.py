@@ -16,7 +16,60 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 
-# Load pre-trained models and tokenizers
+# Load GRU, LSTM, and BiLSTM models and tokenizers
+gru_repo_id = "arjahojnik/GRU-sentiment-model"
+gru_model_path = hf_hub_download(repo_id=gru_repo_id, filename="best_GRU_tuning_model.h5")
+gru_model = load_model(gru_model_path)
+gru_tokenizer_path = hf_hub_download(repo_id=gru_repo_id, filename="my_tokenizer.pkl")
+with open(gru_tokenizer_path, "rb") as f:
+    gru_tokenizer = pickle.load(f)
+
+lstm_repo_id = "arjahojnik/LSTM-sentiment-model"
+lstm_model_path = hf_hub_download(repo_id=lstm_repo_id, filename="LSTM_model.h5")
+lstm_model = load_model(lstm_model_path)
+lstm_tokenizer_path = hf_hub_download(repo_id=lstm_repo_id, filename="my_tokenizer.pkl")
+with open(lstm_tokenizer_path, "rb") as f:
+    lstm_tokenizer = pickle.load(f)
+
+bilstm_repo_id = "arjahojnik/BiLSTM-sentiment-model"
+bilstm_model_path = hf_hub_download(repo_id=bilstm_repo_id, filename="BiLSTM_model.h5")
+bilstm_model = load_model(bilstm_model_path)
+bilstm_tokenizer_path = hf_hub_download(repo_id=bilstm_repo_id, filename="my_tokenizer.pkl")
+with open(bilstm_tokenizer_path, "rb") as f:
+    bilstm_tokenizer = pickle.load(f)
+
+# Preprocessing function for text
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r"[^a-zA-Z\s]", "", text).strip()
+    return text
+
+# Prediction functions for GRU, LSTM, and BiLSTM
+def predict_with_gru(text):
+    cleaned = preprocess_text(text)
+    seq = gru_tokenizer.texts_to_sequences([cleaned])
+    padded_seq = pad_sequences(seq, maxlen=200)
+    probs = gru_model.predict(padded_seq)
+    predicted_class = np.argmax(probs, axis=1)[0]
+    return int(predicted_class + 1)
+
+def predict_with_lstm(text):
+    cleaned = preprocess_text(text)
+    seq = lstm_tokenizer.texts_to_sequences([cleaned])
+    padded_seq = pad_sequences(seq, maxlen=200)
+    probs = lstm_model.predict(padded_seq)
+    predicted_class = np.argmax(probs, axis=1)[0]
+    return int(predicted_class + 1)
+
+def predict_with_bilstm(text):
+    cleaned = preprocess_text(text)
+    seq = bilstm_tokenizer.texts_to_sequences([cleaned])
+    padded_seq = pad_sequences(seq, maxlen=200)
+    probs = bilstm_model.predict(padded_seq)
+    predicted_class = np.argmax(probs, axis=1)[0]
+    return int(predicted_class + 1)
+
+# Load other models
 models = {
     "DistilBERT": {
         "tokenizer": DistilBertTokenizerFast.from_pretrained("nhull/distilbert-sentiment-model"),
@@ -37,49 +90,23 @@ models = {
     }
 }
 
-# Load logistic regression model and vectorizer
+# Logistic regression model and TF-IDF vectorizer
 logistic_regression_repo = "nhull/logistic-regression-model"
-
-# Download and load logistic regression model
 log_reg_model_path = hf_hub_download(repo_id=logistic_regression_repo, filename="logistic_regression_model.pkl")
 with open(log_reg_model_path, "rb") as model_file:
     log_reg_model = pickle.load(model_file)
 
-# Download and load TF-IDF vectorizer
 vectorizer_path = hf_hub_download(repo_id=logistic_regression_repo, filename="tfidf_vectorizer.pkl")
 with open(vectorizer_path, "rb") as vectorizer_file:
     vectorizer = pickle.load(vectorizer_file)
 
-# Move HuggingFace models to device (if GPU is available)
+# Move HuggingFace models to device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 for model_data in models.values():
     if "model" in model_data:
         model_data["model"].to(device)
 
-# Load GRU model and tokenizer
-gru_repo_id = "arjahojnik/GRU-sentiment-model"
-gru_model_path = hf_hub_download(repo_id=gru_repo_id, filename="best_GRU_tuning_model.h5")
-gru_model = load_model(gru_model_path)
-gru_tokenizer_path = hf_hub_download(repo_id=gru_repo_id, filename="my_tokenizer.pkl")
-with open(gru_tokenizer_path, "rb") as f:
-    gru_tokenizer = pickle.load(f)
-
-# Preprocessing function for GRU
-def preprocess_text(text):
-    text = text.lower()
-    text = re.sub(r"[^a-zA-Z\s]", "", text).strip()
-    return text
-
-# GRU prediction function
-def predict_with_gru(text):
-    cleaned = preprocess_text(text)
-    seq = gru_tokenizer.texts_to_sequences([cleaned])
-    padded_seq = pad_sequences(seq, maxlen=200)  # Ensure maxlen matches the GRU training
-    probs = gru_model.predict(padded_seq)
-    predicted_class = np.argmax(probs, axis=1)[0]
-    return int(predicted_class + 1)
-
-# Functions for other model predictions
+# Prediction functions for other models
 def predict_with_distilbert(text):
     tokenizer = models["DistilBERT"]["tokenizer"]
     model = models["DistilBERT"]["model"]
@@ -125,18 +152,18 @@ def predict_with_roberta_ordek899(text):
         predictions = logits.argmax(axis=-1).cpu().numpy()
     return int(predictions[0] + 1)
 
-# Unified function for sentiment analysis and statistics
+# Unified function for analysis
 def analyze_sentiment_and_statistics(text):
     results = {
-        "GRU Model": predict_with_gru(text),
-        "DistilBERT": predict_with_distilbert(text),
         "Logistic Regression": predict_with_logistic_regression(text),
+        "GRU Model": predict_with_gru(text),
+        "LSTM Model": predict_with_lstm(text),
+        "BiLSTM Model": predict_with_bilstm(text),
+        "DistilBERT": predict_with_distilbert(text),
         "BERT Multilingual (NLP Town)": predict_with_bert_multilingual(text),
         "TinyBERT": predict_with_tinybert(text),
         "RoBERTa": predict_with_roberta_ordek899(text),
     }
-    
-    # Calculate statistics
     scores = list(results.values())
     min_score = min(scores)
     max_score = max(scores)
@@ -158,12 +185,64 @@ def analyze_sentiment_and_statistics(text):
     return results, statistics
 
 # Gradio Interface
-with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding: 20px; }") as demo:
-    gr.Markdown("# Sentiment Analysis App")
+with gr.Blocks(
+    css="""
+    .gradio-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background-color: #1e1e1e; /* Dark background for contrast */
+        color: white; /* White text throughout */
+    }
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        color: white; /* White text for title */
+    }
+    footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: white; /* White text for footer */
+    }
+    .gr-button {
+        background-color: #4a4a4a; /* Dark gray button background */
+        color: white; /* White button text */
+        border-radius: 8px; /* Rounded buttons */
+        padding: 10px 20px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    .gr-button:hover {
+        background-color: #6a6a6a; /* Slightly lighter gray on hover */
+    }
+    .gr-textbox, .gr-dropdown, .gr-output {
+        border: 1px solid #4a4a4a; /* Subtle gray border */
+        border-radius: 8px; /* Rounded edges */
+        background-color: #2e2e2e; /* Darker gray input background */
+        color: white; /* White text for inputs/outputs */
+    }
+    """
+) as demo:
+    gr.Markdown("# Sentiment Analysis Demo")
     gr.Markdown(
-        "This app predicts the sentiment of the input text on a scale from 1 to 5 using multiple models and provides basic statistics."
+        """
+        This demo analyzes the sentiment of text inputs (e.g., hotel or restaurant reviews) on a scale from 1 to 5 using various machine learning, deep learning, and transformer-based models. 
+
+        - **Machine Learning**: Logistic Regression with TF-IDF.
+        - **Deep Learning**: GRU, LSTM, and BiLSTM models.
+        - **Transformers**: DistilBERT, TinyBERT, BERT Multilingual, and RoBERTa.
+
+        ### Features:
+        - Compare predictions across different models.
+        - See which model predicts the highest and lowest scores.
+        - Get the average sentiment score across all models.
+        - Easily test with your own input or select from suggested reviews.
+
+        Use this app to explore how different models interpret sentiment and compare their outputs!
+        """
     )
-    
+
     with gr.Row():
         with gr.Column():
             text_input = gr.Textbox(
@@ -184,7 +263,6 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
                 interactive=True
             )
             
-            # Sync dropdown with text input
             def update_textbox(selected_sample):
                 return selected_sample
             
@@ -193,43 +271,68 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
                 inputs=[sample_dropdown],
                 outputs=[text_input]
             )
-        
-        with gr.Column():
             analyze_button = gr.Button("Analyze Sentiment")
+        
+    with gr.Row():
+        with gr.Column():
+            gr.Markdown("### Machine Learning")
+            log_reg_output = gr.Textbox(label="Logistic Regression", interactive=False)
+
+        with gr.Column():
+            gr.Markdown("### Deep Learning")
+            gru_output = gr.Textbox(label="GRU Model", interactive=False)
+            lstm_output = gr.Textbox(label="LSTM Model", interactive=False)
+            bilstm_output = gr.Textbox(label="BiLSTM Model", interactive=False)
+
+        with gr.Column():
+            gr.Markdown("### Transformers")
+            distilbert_output = gr.Textbox(label="DistilBERT", interactive=False)
+            bert_output = gr.Textbox(label="BERT Multilingual", interactive=False)
+            tinybert_output = gr.Textbox(label="TinyBERT", interactive=False)
+            roberta_output = gr.Textbox(label="RoBERTa", interactive=False)
 
     with gr.Row():
         with gr.Column():
-            gru_output = gr.Textbox(label="Predicted Sentiment (GRU Model)", interactive=False)
-            distilbert_output = gr.Textbox(label="Predicted Sentiment (DistilBERT)", interactive=False)
-            log_reg_output = gr.Textbox(label="Predicted Sentiment (Logistic Regression)", interactive=False)
-            bert_output = gr.Textbox(label="Predicted Sentiment (BERT Multilingual)", interactive=False)
-            tinybert_output = gr.Textbox(label="Predicted Sentiment (TinyBERT)", interactive=False)
-            roberta_ordek_output = gr.Textbox(label="Predicted Sentiment (RoBERTa)", interactive=False)
-        
-        with gr.Column():
-            statistics_output = gr.Textbox(label="Statistics (Lowest, Highest, Average)", interactive=False)
+            gr.Markdown("### Statistics")
+            stats_output = gr.Textbox(label="Statistics", interactive=False)
 
-    # Button to analyze sentiment and show statistics
+    # Add footer
+    gr.Markdown(
+        """
+        <footer>
+            This demo was built as a part of the NLP course at the University of Zagreb.  
+            Check out our GitHub repository:  
+            <a href="https://github.com/FFZG-NLP-2024/TripAdvisor-Sentiment/" target="_blank" style="color: white; text-decoration: underline;">TripAdvisor Sentiment Analysis</a>  
+            Explore our HuggingFace collection:  
+            <a href="https://huggingface.co/collections/nhull/nlp-zg-6794604b85fd4216e6470d38" target="_blank" style="color: white; text-decoration: underline;">NLP Zagreb HuggingFace Collection</a>
+        </footer>
+        """
+    )
+
     def process_input_and_analyze(text_input):
         results, statistics = analyze_sentiment_and_statistics(text_input)
         if "Message" in statistics:
             return (
-                f"{results['GRU Model']}",
-                f"{results['DistilBERT']}",
-                f"{results['Logistic Regression']}",
-                f"{results['BERT Multilingual (NLP Town)']}",
-                f"{results['TinyBERT']}",
-                f"{results['RoBERTa']}",
+                results["Logistic Regression"],
+                results["GRU Model"],
+                results["LSTM Model"],
+                results["BiLSTM Model"],
+                results["DistilBERT"],
+                results["BERT Multilingual (NLP Town)"],
+                results["TinyBERT"],
+                results["RoBERTa"],
                 f"Statistics:\n{statistics['Message']}\nAverage Score: {statistics['Average Score']}"
             )
         else:
             return (
-                f"{results['GRU Model']}",
-                f"{results['DistilBERT']}",
-                f"{results['Logistic Regression']}",
-                f"{results['BERT Multilingual (NLP Town)']}",
-                f"{results['TinyBERT']}",
-                f"{results['RoBERTa']}",
+                results["Logistic Regression"],
+                results["GRU Model"],
+                results["LSTM Model"],
+                results["BiLSTM Model"],
+                results["DistilBERT"],
+                results["BERT Multilingual (NLP Town)"],
+                results["TinyBERT"],
+                results["RoBERTa"],
                 f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
             )
     
@@ -237,15 +340,16 @@ with gr.Blocks(css=".gradio-container { max-width: 900px; margin: auto; padding:
         process_input_and_analyze,
         inputs=[text_input],
         outputs=[
-            gru_output,
-            distilbert_output, 
             log_reg_output, 
+            gru_output, 
+            lstm_output, 
+            bilstm_output, 
+            distilbert_output, 
             bert_output, 
             tinybert_output, 
-            roberta_ordek_output, 
-            statistics_output
+            roberta_output, 
+            stats_output
         ]
     )
 
-# Launch the app
 demo.launch()
