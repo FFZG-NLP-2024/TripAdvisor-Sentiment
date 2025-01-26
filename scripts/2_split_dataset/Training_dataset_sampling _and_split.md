@@ -18,13 +18,12 @@ To address this imbalance, we randomly sampled 8,000 reviews from each rating ca
 ## Data Split
 
 After balancing, the dataset was split into:
-- Training set: 24,000 reviews (60% of the total dataset),
-- Validation set: 4,000 reviews (10% of the total dataset),
-- Test set: 8,000 reviews (20% of the total dataset),
+- Training set: 30,400 reviews 
+- Validation set: 16,000 reviews 
+- Test set: 8,000 reviews 
 
-Ensuring consistent label distribution through stratified sampling. The splits were saved as Parquet files (`train.parquet`, `validation.parquet`, `test.parquet`).
+The splits were saved as Parquet files (`train.parquet`, `validation.parquet`, `test.parquet`).
 
-The total number of examples across all sets is 40,000.
 
 ## Dataset Availability
 
