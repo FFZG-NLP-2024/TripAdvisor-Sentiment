@@ -5,3 +5,4 @@ pillow==11.0.0
 tensorflow==2.18.0
 torch==2.5.1
 transformers==4.47.1
+scikit-learn==1.6.0
