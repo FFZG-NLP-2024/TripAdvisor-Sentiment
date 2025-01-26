@@ -53,11 +53,13 @@ The primary aim of this research was to develop and evaluate a sentiment analysi
 ### Detailed Metrics
 #### Hotels
 - **Overall Metrics:**
+  
   - Accuracy: 0.672
   - Precision: 0.674
   - Recall: 0.672
   - F1 Score: 0.674
 - **Class-wise Metrics:**
+  
   | Label | Precision | Recall | F1-score | Support |
   |-------|-----------|--------|----------|---------|
   | 1     | 0.75      | 0.76   | 0.75     | 1600    |
@@ -68,11 +70,13 @@ The primary aim of this research was to develop and evaluate a sentiment analysi
 
 #### Restaurants
 - **Overall Metrics:**
+  
   - Accuracy: 0.744
   - Precision: 0.81
   - Recall: 0.74
   - F1 Score: 0.73
 - **Class-wise Metrics:**
+  
   | Label | Precision | Recall | F1-score | Support |
   |-------|-----------|--------|----------|---------|
   | 1     | 1.00      | 0.14   | 0.25     | 14      |
