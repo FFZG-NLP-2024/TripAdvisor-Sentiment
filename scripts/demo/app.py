@@ -1,10 +1,9 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # Disable GPU and enforce CPU execution
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 from PIL import Image
 from huggingface_hub import hf_hub_download
 
-# Load a fun unicorn image
 unicorn_image_path = "scripts/demo/unicorn.png"
 
 import gradio as gr
@@ -22,7 +21,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 
-# Load GRU, LSTM, and BiLSTM models and tokenizers
 gru_repo_id = "arjahojnik/GRU-sentiment-model"
 gru_model_path = hf_hub_download(repo_id=gru_repo_id, filename="best_GRU_tuning_model.h5")
 gru_model = load_model(gru_model_path)
@@ -44,13 +42,11 @@ bilstm_tokenizer_path = hf_hub_download(repo_id=bilstm_repo_id, filename="my_tok
 with open(bilstm_tokenizer_path, "rb") as f:
     bilstm_tokenizer = pickle.load(f)
 
-# Preprocessing function for text
 def preprocess_text(text):
     text = text.lower()
     text = re.sub(r"[^a-zA-Z\s]", "", text).strip()
     return text
 
-# Prediction functions for GRU, LSTM, and BiLSTM
 def predict_with_gru(text):
     cleaned = preprocess_text(text)
     seq = gru_tokenizer.texts_to_sequences([cleaned])
@@ -75,13 +71,12 @@ def predict_with_bilstm(text):
     predicted_class = np.argmax(probs, axis=1)[0]
     return int(predicted_class + 1)
 
-# Load other models
 models = {
     "DistilBERT": {
         "tokenizer": DistilBertTokenizerFast.from_pretrained("nhull/distilbert-sentiment-model"),
         "model": DistilBertForSequenceClassification.from_pretrained("nhull/distilbert-sentiment-model"),
     },
-    "Logistic Regression": {},  # Placeholder for logistic regression
+    "Logistic Regression": {},
     "BERT Multilingual (NLP Town)": {
         "tokenizer": AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment"),
         "model": AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment"),
@@ -96,7 +91,6 @@ models = {
     }
 }
 
-# Logistic regression model and TF-IDF vectorizer
 logistic_regression_repo = "nhull/logistic-regression-model"
 log_reg_model_path = hf_hub_download(repo_id=logistic_regression_repo, filename="logistic_regression_model.pkl")
 with open(log_reg_model_path, "rb") as model_file:
@@ -106,13 +100,11 @@ vectorizer_path = hf_hub_download(repo_id=logistic_regression_repo, filename="tf
 with open(vectorizer_path, "rb") as vectorizer_file:
     vectorizer = pickle.load(vectorizer_file)
 
-# Move HuggingFace models to device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 for model_data in models.values():
     if "model" in model_data:
         model_data["model"].to(device)
 
-# Prediction functions for other models
 def predict_with_distilbert(text):
     tokenizer = models["DistilBERT"]["tokenizer"]
     model = models["DistilBERT"]["model"]
@@ -158,7 +150,6 @@ def predict_with_roberta_ordek899(text):
         predictions = logits.argmax(axis=-1).cpu().numpy()
     return int(predictions[0] + 1)
 
-# Unified function for analysis
 def analyze_sentiment_and_statistics(text):
     results = {
         "Logistic Regression": predict_with_logistic_regression(text),
@@ -190,7 +181,6 @@ def analyze_sentiment_and_statistics(text):
         }
     return results, statistics
 
-# Gradio Interface
 with gr.Blocks(
     css="""
     .gradio-container {
@@ -252,10 +242,9 @@ with gr.Blocks(
 }
     """
 ) as demo:
-    # Add the unicorn image at the start
     gr.Image(
-        value=unicorn_image_path,  # File path or URL
-        type="filepath",  # Correct type for file paths
+        value=unicorn_image_path,
+        type="filepath",
         elem_classes=["unicorn-image"]
     )
 
@@ -268,7 +257,6 @@ with gr.Blocks(
         **Enjoy the magic!**
         """
     )
-
 
     with gr.Row():
         with gr.Column():
@@ -285,12 +273,15 @@ with gr.Blocks(
                 "Terrible! The room was dirty, and the service was non-existent."
             ]
             sample_dropdown = gr.Dropdown(
-                choices=sample_reviews, 
+                choices=["Select an option"] + sample_reviews,
                 label="Or select a sample review:", 
+                value=None,
                 interactive=True
             )
             
             def update_textbox(selected_sample):
+                if selected_sample == "Select an option":
+                    return ""
                 return selected_sample
             
             sample_dropdown.change(
@@ -320,10 +311,14 @@ with gr.Blocks(
 
     with gr.Row():
         with gr.Column():
+            gr.Markdown("### Feedback")
+            feedback_output = gr.Textbox(label="Feedback", interactive=False)
+
+    with gr.Row():
+        with gr.Column():
             gr.Markdown("### Statistics")
             stats_output = gr.Textbox(label="Statistics", interactive=False)
 
-    # Add footer
     gr.Markdown(
         """
         <footer>
@@ -335,80 +330,69 @@ with gr.Blocks(
         </footer>
         """
     )
+
+    def convert_to_stars(rating):
+        return "★" * rating + "☆" * (5 - rating)
+
     def process_input_and_analyze(text_input):
-    # Check for empty input
         if not text_input.strip():
             funny_message = "Are you sure you wrote something? Try again! 🧐"
             return (
-                funny_message,  # Logistic Regression
-                funny_message,  # GRU
-                funny_message,  # LSTM
-                funny_message,  # BiLSTM
-                funny_message,  # DistilBERT
-                funny_message,  # BERT Multilingual
-                funny_message,  # TinyBERT
-                funny_message,  # RoBERTa
-                "No statistics to display, as nothing was input. 🤷‍♀️"
+                "", "", "", "", "", "", "", "",
+                funny_message,
+                "No statistics can be shown."
             )
         
-        # Check for one letter/number input
         if len(text_input.strip()) == 1 or text_input.strip().isdigit():
             funny_message = "Why not write something that makes sense? 🤔"
             return (
-                funny_message,  # Logistic Regression
-                funny_message,  # GRU
-                funny_message,  # LSTM
-                funny_message,  # BiLSTM
-                funny_message,  # DistilBERT
-                funny_message,  # BERT Multilingual
-                funny_message,  # TinyBERT
-                funny_message,  # RoBERTa
-                "No statistics to display for one letter or number. 😅"
+                "", "", "", "", "", "", "", "",
+                funny_message,
+                "No statistics can be shown."
             )
         
-        # Check if the review is shorter than 5 words
         if len(text_input.split()) < 5:
             results, statistics = analyze_sentiment_and_statistics(text_input)
             short_message = "Maybe try with some longer text next time. 😉"
+            stats_text = (
+                f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\n"
+                f"Average Score: {statistics['Average Score']}"
+                if "Message" not in statistics else f"Statistics:\n{statistics['Message']}"
+            )
             return (
-                f"{results['Logistic Regression']} - {short_message}",
-                f"{results['GRU Model']} - {short_message}",
-                f"{results['LSTM Model']} - {short_message}",
-                f"{results['BiLSTM Model']} - {short_message}",
-                f"{results['DistilBERT']} - {short_message}",
-                f"{results['BERT Multilingual (NLP Town)']} - {short_message}",
-                f"{results['TinyBERT']} - {short_message}",
-                f"{results['RoBERTa']} - {short_message}",
-                f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}\n{short_message}"
+                convert_to_stars(results['Logistic Regression']),
+                convert_to_stars(results['GRU Model']),
+                convert_to_stars(results['LSTM Model']),
+                convert_to_stars(results['BiLSTM Model']),
+                convert_to_stars(results['DistilBERT']),
+                convert_to_stars(results['BERT Multilingual (NLP Town)']),
+                convert_to_stars(results['TinyBERT']),
+                convert_to_stars(results['RoBERTa']),
+                short_message,
+                stats_text
             )
 
-        # Proceed with normal sentiment analysis if none of the above conditions apply
         results, statistics = analyze_sentiment_and_statistics(text_input)
+        feedback_message = "Sentiment analysis completed successfully! 😊"
+        
         if "Message" in statistics:
-            return (
-                results["Logistic Regression"],
-                results["GRU Model"],
-                results["LSTM Model"],
-                results["BiLSTM Model"],
-                results["DistilBERT"],
-                results["BERT Multilingual (NLP Town)"],
-                results["TinyBERT"],
-                results["RoBERTa"],
-                f"Statistics:\n{statistics['Message']}\nAverage Score: {statistics['Average Score']}"
-            )
+            stats_text = f"Statistics:\n{statistics['Message']}\nAverage Score: {statistics['Average Score']}"
         else:
-            return (
-                results["Logistic Regression"],
-                results["GRU Model"],
-                results["LSTM Model"],
-                results["BiLSTM Model"],
-                results["DistilBERT"],
-                results["BERT Multilingual (NLP Town)"],
-                results["TinyBERT"],
-                results["RoBERTa"],
-                f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
-            )
-    
+            stats_text = f"Statistics:\n{statistics['Lowest Score']}\n{statistics['Highest Score']}\nAverage Score: {statistics['Average Score']}"
+        
+        return (
+            convert_to_stars(results["Logistic Regression"]),
+            convert_to_stars(results["GRU Model"]),
+            convert_to_stars(results["LSTM Model"]),
+            convert_to_stars(results["BiLSTM Model"]),
+            convert_to_stars(results["DistilBERT"]),
+            convert_to_stars(results["BERT Multilingual (NLP Town)"]),
+            convert_to_stars(results["TinyBERT"]),
+            convert_to_stars(results["RoBERTa"]),
+            feedback_message,
+            stats_text
+        )
+
     analyze_button.click(
         process_input_and_analyze,
         inputs=[text_input],
@@ -420,8 +404,9 @@ with gr.Blocks(
             distilbert_output, 
             bert_output, 
             tinybert_output, 
-            roberta_output, 
-            stats_output
+            roberta_output,
+            feedback_output, 
+            stats_output    
         ]
     )
 
