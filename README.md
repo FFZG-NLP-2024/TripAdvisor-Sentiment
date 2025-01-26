@@ -125,8 +125,8 @@ For more details, please refer to the full license text.
 
 ### Team Members
 - **[Nives Hüll](https://hulln.github.io/)** (nh23084@student.uni-lj.si, nhull@m.ffzg.hr): Role/Contribution (e.g., Project Coordinator, Data Acquisition)
-- **[Ela Novak](https://github.com/ElaNovak4)**: (en87392@student.uni-lj.si, enovak3@ffzg.hr, ela.novak8@gmail.com): Role/Contribution (e.g., Data Analyst, Review Processing)
-- **[Arja Hojnik](https://github.com/arjica)**(ah39150@student.uni-lj.si, ahojnik@ffzg.si): Role/Contribution (e.g., Programmer, Script Development) *(Please add your name and role here)*
+- **[Ela Novak](https://github.com/ElaNovak4)** (en87392@student.uni-lj.si, enovak3@ffzg.hr, ela.novak8@gmail.com): Role/Contribution (e.g., Data Analyst, Review Processing)
+- **[Arja Hojnik](https://github.com/arjica)** (ah39150@student.uni-lj.si, ahojnik@ffzg.si): Role/Contribution (e.g., Programmer, Script Development) *(Please add your name and role here)*
 - **[Meta Kokalj](https://github.com/meta899)** (mk10260@student.uni-lj.si, mkokalj@m.ffzg.hr, m.marguerite.k@gmail.com): Role/Contribution (e.g., Researcher, Data Analyst, Documentation)
 - **[Team Member 4]**: Role/Contribution (e.g., Reviewer, Quality Assurance) *(Please add your name and role here)*
 
