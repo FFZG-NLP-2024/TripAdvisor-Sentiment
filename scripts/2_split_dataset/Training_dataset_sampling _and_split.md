@@ -20,7 +20,9 @@ To address this imbalance, we randomly sampled 8,000 reviews from each rating ca
 After balancing, the dataset was split into:
 - Training set: 30,400 reviews 
 - Validation set: 16,000 reviews 
-- Test set: 8,000 reviews 
+- Test set: 8,000 reviews
+
+The final numbers were obtained by initially splitting the balanced dataset into 80% for training and validation, and 20% for testing. The training and validation sets were then split 75-25, maintaining consistent label distribution through stratified sampling at each stage.
 
 The splits were saved as Parquet files (`train.parquet`, `validation.parquet`, `test.parquet`).
 
