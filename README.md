@@ -128,7 +128,7 @@ For more details, please refer to the full license text.
 - **[Ela Novak](https://github.com/ElaNovak4)** (en87392@student.uni-lj.si, enovak3@ffzg.hr, ela.novak8@gmail.com): Role/Contribution (Data Analyst, Review Processing)
 - **[Arja Hojnik](https://github.com/arjica)** (ah39150@student.uni-lj.si, ahojnik@ffzg.si): Role/Contribution (Programmer, Script Development) 
 - **[Meta Kokalj](https://github.com/meta899)** (mk10260@student.uni-lj.si, mkokalj@m.ffzg.hr, m.marguerite.k@gmail.com): Role/Contribution (Researcher, Data Analyst, Documentation)
-- **[Team Member 4]**: Role/Contribution (e.g., Reviewer, Quality Assurance) *(Please add your name and role here)*
+- **[Katarina Plementaš](https://github.com/KatarinaPlementas)** (kp88260@student.uni-lj.si, kplementa@m.ffzg.hr): Role/Contribution (Data Analyst, Documentation) 
 
 ### Acknowledgments
 - Special thanks to our professor [Gaurish Thakkar](https://github.com/thak123/) for guidance and support throughout the project.
