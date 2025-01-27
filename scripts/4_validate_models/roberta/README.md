@@ -123,3 +123,23 @@ This study focuses on sentiment analysis for hotel reviews while exploring cross
    - Experiment with different hyperparameter combinations for improved accuracy and consistency.
 
 ---
+# Analysis Overview
+
+In this analysis, we processed the prediction results from the model on the test datasets for both **Hotels** and **Restaurants**. The goal was to extract only those instances where the absolute difference between the **True Label** and **Predicted Label** was significantly high, indicating potential misclassifications. This step helps us identify more challenging or ambiguous predictions for further analysis.
+
+### Steps:
+
+1. **Mapping Predictions to the Original Dataset**:
+   - We started by mapping the predictions from the model back to the original test datasets (for both Hotels and Restaurants). 
+   - Each row from the prediction result CSV file was matched with the corresponding review text from the test dataset using the index. This allowed us to create a comprehensive file that included the original review text, true labels, predicted labels, and the absolute difference between true and predicted values.
+
+2. **Filtering Predictions Based on Absolute Difference**:
+   - After mapping, we filtered the rows based on the absolute difference between the true label and predicted label:
+     - **For Hotels**: We extracted cases where the **absolute difference** between true and predicted labels was **3 or more**.
+     - **For Restaurants**: We focused on cases where the **absolute difference** between true and predicted labels was **2 or more** (since there were only two instances with an absolute difference equal to 2 in the restaurant dataset).
+
+3. **Filtered CSV Files**:
+   - The final result was a filtered dataset for both Hotels and Restaurants, containing only those reviews where the model predictions were significantly off from the true labels. This can be used for further analysis of difficult or ambiguous predictions.
+
+### Purpose of Filtering:
+- The main purpose of this filtering step was to focus on the predictions where the model performed poorly or struggled with high misclassification errors (high absolute differences). This helps in understanding the weaknesses of the model and can guide further improvements or analysis.
