@@ -8,7 +8,8 @@ from tensorflow.keras.models import load_model
 # -------------------------------
 # 1) Load data
 # -------------------------------
-df = pd.read_parquet("hf://datasets/nhull/tripadvisor-split-dataset/data/train.parquet")
+# Use pd.read_csv() for TSV files
+df = pd.read_csv("hf://datasets/nhull/125-tripadvisor-reviews/reviews_text_label.tsv", sep="\t")
 print("Data shape:", df.shape)
 
 # -------------------------------
@@ -19,7 +20,7 @@ def preprocess_text(text):
     text = re.sub(r'[^a-zA-Z\s]', '', text).strip()
     return text
 
-df["cleaned_review"] = df["review"].apply(preprocess_text)
+df["cleaned_review"] = df["text"].apply(preprocess_text)
 
 # -------------------------------
 # 3) Convert text -> sequences -> pad
@@ -39,7 +40,7 @@ y_eval = y_eval.to_numpy()
 # -------------------------------
 # 4) Load final trained model
 # -------------------------------
-model = load_model("LSTM_model.h5")
+model = load_model("LSTM_model.h5.h5")    #change model
 
 # -------------------------------
 # 5) Evaluate
@@ -48,9 +49,8 @@ loss, acc = model.evaluate(X_eval_padded, y_eval, batch_size=32)
 print("Evaluation Loss:", loss)
 print("Evaluation Accuracy:", acc)
 
-
 # -------------------------------
-# 6) Confussion matrix
+# 6) Confusion matrix
 # -------------------------------
 from sklearn.metrics import confusion_matrix, classification_report
 
