@@ -84,10 +84,10 @@ TripAdvisor-Sentiment
 
 | Metric     | Logistic Regression |  LSTM  |  GRU   | BiLSTM | TinyBERT | RoBERTa | DistilBERT |
 |------------|---------------------|--------|--------|--------|----------|---------|------------| 
-| Accuracy   | 0.6105              | 0.6041 | 0.6216 | 0.6167 | 0.6535   | 0.672   | 0.6391     |
-| Precision  | 0.6088              | 0.60   | 0.62   | 0.62   | 0.635    | 0.674   | 0.6416     |
-| Recall     | 0.61                | 0.60   | 0.62   | 0.62   | 0.641    | 0.672   | 0.6391     |
-| F1-Score   | 0.61                | 0.60   | 0.62   | 0.62   | 0.636    | 0.674   | 0.6400     |
+| Accuracy   | 0.61                | 0.60   | 0.62   | 0.62   | 0.65     | 0.67    | 0.64       |
+| Precision  | 0.61                | 0.60   | 0.62   | 0.62   | 0.64     | 0.67    | 0.64       |
+| Recall     | 0.61                | 0.60   | 0.62   | 0.62   | 0.64     | 0.67    | 0.64       |
+| F1-Score   | 0.61                | 0.60   | 0.62   | 0.62   | 0.64     | 0.67    | 0.64       |
 
 **Note:** Additional metrics can be found in the final report, located in the `docs` folder of the repository.
 
