@@ -108,10 +108,10 @@ sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=range(1,
 plt.xlabel('Predicted Labels')
 plt.ylabel('True Labels')
 plt.title('Confusion Matrix DistilBERT')
-plt.savefig("scripts/validate_models/confusion_matrix_distilbert.png")
+plt.savefig("scripts/4_validate_models/distilbert/confusion_matrix_bert_multilingual.png")
 plt.show()
 
 # Save results to a CSV file
 results_df = pd.DataFrame(results)
-results_df.to_csv("validation_results_distilbert.csv", index=False)
-print("Results saved to 'validation_results_distilbert.csv'")
+results_df.to_csv("scripts/4_validate_models/distilbert/validation_results_bert_multilingual.csv", index=False)
+print("Results saved to 'validation_results_bert_multilingual.csv'")

@@ -5,9 +5,9 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from torch.nn.functional import softmax
 
-# Load the model and tokenizer from Hugging Face
-model_name = "nhull/distilbert-sentiment-model"
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
+# Load the model and tokenizer
+model_name = "distilbert-base-uncased"
+model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=5)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # Move model to the correct device
@@ -20,7 +20,7 @@ dataset = load_dataset("nhull/tripadvisor-split-dataset-v2")
 
 # Preprocess the dataset
 def preprocess_function(examples):
-    examples["label"] = [label - 1 for label in examples["label"]]  # Adjust labels from 1-5 to 0-4
+    examples["label"] = [label - 1 for label in examples["label"]]  # Adjust labels to 0-4
     return tokenizer(examples["review"], padding="max_length", truncation=True, max_length=128)
 
 tokenized_dataset = dataset.map(preprocess_function, batched=True)
@@ -37,7 +37,7 @@ def custom_collate_fn(features):
 # Create the validation DataLoader
 validation_dataloader = DataLoader(
     tokenized_dataset["test"], 
-    batch_size=64,  # You can adjust the batch size if needed
+    batch_size=64, 
     shuffle=False, 
     collate_fn=custom_collate_fn
 )
@@ -49,21 +49,26 @@ model.eval()
 all_preds = []
 all_labels = []
 
+# Perform inference
 with torch.no_grad():
     for batch in validation_dataloader:
         batch = {key: value.to(device) for key, value in batch.items()}
         outputs = model(**batch)
         logits = outputs.logits
-        probs = softmax(logits, dim=-1)  # Get probabilities from logits
-        preds = torch.argmax(probs, dim=-1)  # Get predicted class
-        all_preds.extend(preds.cpu().tolist())  # Convert to list and move to CPU
-        all_labels.extend(batch["labels"].cpu().tolist())  # Ground truth labels
+        probs = softmax(logits, dim=-1)
+        preds = torch.argmax(probs, dim=-1)
+        all_preds.extend(preds.cpu().tolist())
+        all_labels.extend(batch["labels"].cpu().tolist())
 
-# Calculate accuracy
+# Convert predictions and labels back to the original range (1-5)
+all_preds = [pred + 1 for pred in all_preds]
+all_labels = [label + 1 for label in all_labels]
+
+# Recalculate accuracy
 accuracy = accuracy_score(all_labels, all_preds)
 print(f"Validation Accuracy: {accuracy:.4f}")
 
-# Classification report (Precision, Recall, F1-score)
+# Classification report
 print("\nClassification Report:")
 print(classification_report(all_labels, all_preds, digits=4))
 
