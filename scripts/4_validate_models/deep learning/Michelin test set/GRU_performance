@@ -9,6 +9,7 @@ Test Performance
 
 
 Classification Report (Test Set)
+
 | Label | Precision | Recall | F1-Score | Support |
 |-------|-----------|--------|----------|---------|
 | 1     |   1.00    |  0.29  |   0.44   |   14    |
@@ -19,6 +20,7 @@ Classification Report (Test Set)
 
 
 Confusion Matrix (Test Set)
+
 | True \\ Predicted | 1    | 2    | 3    | 4    | 5    |
 |-------------------|------|------|------|------|------|
 | **1**             |   4  |   7  |   3  |   0  |   0  |
