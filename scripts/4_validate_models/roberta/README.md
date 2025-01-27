@@ -1,23 +1,48 @@
 # RoBERTA Sentiment Analysis Model: Performance Metrics
 
-## Objective
+
+## Table of Contents
+1. [Objective](#objective)
+2. [Methodology](#methodology)
+   - [Model Architecture](#model-architecture)
+   - [Training Strategy](#training-strategy)
+   - [Implementation Details](#implementation-details)
+3. [Performance Metrics](#performance-metrics)
+   - [Training and Validation Performance (Hotels)](#training-and-validation-performance-hotels)
+   - [Test Performance](#test-performance)
+     - [Hotel Test Dataset](#hotel-test-dataset)
+     - [Restaurant Test Dataset (Cross-domain Evaluation)](#restaurant-test-dataset-cross-domain-evaluation)
+   - [Detailed Metrics](#detailed-metrics)
+     - [Hotels](#hotels)
+     - [Restaurants](#restaurants)
+4. [Evaluation](#evaluation)
+   - [Metrics Used](#metrics-used)
+   - [Cross-domain Testing](#cross-domain-testing)
+5. [Research Significance](#research-significance)
+6. [Future Improvements](#future-improvements)
+7. [Analysis of Predictions](#analysis-of-predictions)
+   - [Steps](#steps)
+  
+---
+
+## 1. Objective
 The primary aim of this research was to develop and evaluate a sentiment analysis model capable of predicting customer satisfaction ratings (on a 1-5 scale) for hotel reviews, with additional testing on restaurant reviews to explore cross-domain capabilities.
 
 ---
 
-## Methodology
+## 2. Methodology
 
-### Model Architecture
+### 2.1 Model Architecture
 - **Base Model:** RoBERTa
 - **Task:** Multi-class classification (5 rating classes)
 
-### Training Strategy
+### 2.2 Training Strategy
 - **Datasets:**
   - **Hotel Reviews:** TripAdvisor hotel reviews
   - **Restaurant Reviews:** 125 TripAdvisor restaurant reviews annotated by the project group
 - **Evaluation Strategy:** Train/validation/test split for hotel reviews; cross-domain testing on restaurant reviews
 
-### Implementation Details
+### 2.3 Implementation Details
 - **Preprocessing:** Text tokenization with a max length of 128
 - **Hyperparameters:**
   - Batch size: 16 (hotels), 8 (restaurants)
@@ -28,30 +53,30 @@ The primary aim of this research was to develop and evaluate a sentiment analysi
 
 ---
 
-## Performance Metrics
+## 3. Performance Metrics
 
-### Training and Validation Performance (Hotels)
+### 3.1 Training and Validation Performance (Hotels)
 - **Training Loss:** Decreased from 0.8893 (epoch 1) to 0.5313 (epoch 3), indicating effective learning
 - **Validation Accuracy:** 65.94%
 - **Validation Metrics:**
   - Consistent precision, recall, and F1-score across classes
   - Class 5 performed best
 
-### Test Performance
+### 3.2 Test Performance
 
-#### Hotel Test Dataset
+#### 3.2.1 Hotel Test Dataset
 - **Accuracy:** 67.22%
 - **Class Performance:**
   - Class 5 performed best
 
-#### Restaurant Test Dataset (Cross-domain Evaluation)
+#### 3.2.2 Restaurant Test Dataset (Cross-domain Evaluation)
 - **Accuracy:** 74.40%
 - **Performance Variability:**
   - Class 5 performed best
   - Significant variation across classes
 
-### Detailed Metrics
-#### Hotels
+### 3.3 Detailed Metrics
+#### 3.3.1 Hotels
 - **Overall Metrics:**
   
   - Accuracy: 0.672
@@ -68,7 +93,7 @@ The primary aim of this research was to develop and evaluate a sentiment analysi
   | 4     | 0.62      | 0.62   | 0.62     | 1600    |
   | 5     | 0.77      | 0.77   | 0.77     | 1600    |
 
-#### Restaurants
+#### 3.3.2 Restaurants
 - **Overall Metrics:**
   
   - Accuracy: 0.744
@@ -87,20 +112,20 @@ The primary aim of this research was to develop and evaluate a sentiment analysi
 
 ---
 
-## Evaluation
+## 4. Evaluation
 
-### Metrics Used
+### 4.1 Metrics Used
 - Classification reports with precision, recall, and F1-score
 - Confusion matrices for error analysis
 - Instance-level prediction analysis
 
-### Cross-domain Testing
+### 4.2 Cross-domain Testing
 - **Dataset:** TripAdvisor restaurant reviews (125 annotated reviews)
 - **Purpose:** Explore generalization capability to a related but distinct domain
 
 ---
 
-## Research Significance
+## 5. Research Significance
 This study focuses on sentiment analysis for hotel reviews while exploring cross-domain applicability to restaurant reviews. It highlights:
 - Differences between domains (e.g., broader hotel services vs. focused restaurant aspects)
 - Potential for cross-domain sentiment analysis to inform business decisions
@@ -108,7 +133,7 @@ This study focuses on sentiment analysis for hotel reviews while exploring cross
 
 ---
 
-## Future Improvements
+## 6. Future Improvements
 
 1. **Data Augmentation:**
    - Augment training data to prevent overfitting and ensure diverse learning.
@@ -123,11 +148,11 @@ This study focuses on sentiment analysis for hotel reviews while exploring cross
    - Experiment with different hyperparameter combinations for improved accuracy and consistency.
 
 ---
-# Analysis Overview
+# 7. Analysis Of Predictions
 
 In this analysis, we processed the prediction results from the model on the test datasets for both **Hotels** and **Restaurants**. The goal was to extract only those instances where the absolute difference between the **True Label** and **Predicted Label** was significantly high, indicating potential misclassifications. This step helps us identify more challenging or ambiguous predictions for further analysis.
 
-### Steps:
+### 7.1 Steps:
 
 1. **Mapping Predictions to the Original Dataset**:
    - We started by mapping the predictions from the model back to the original test datasets (for both Hotels and Restaurants). 
