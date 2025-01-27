@@ -46,7 +46,7 @@ sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=range(le
 plt.xlabel("Predicted Labels")
 plt.ylabel("True Labels")
 plt.title("Confusion Matrix")
-plt.savefig("scripts/validate_models/log_regression/confusion_matrix_log_regression.png")
+plt.savefig("scripts/4_validate_models/log_regression/confusion_matrix_log_regression1.png")
 plt.show()
 
 # Create a DataFrame for detailed output
@@ -59,4 +59,4 @@ output_data = pd.DataFrame({
 })
 
 # Save the DataFrame to a CSV file
-output_data.to_csv("scripts/validate_models/log_regression/validation_results_log_regression.csv", index=False)
+#output_data.to_csv("scripts/4_validate_models/log_regression/validation_results_log_regression.csv", index=False)
